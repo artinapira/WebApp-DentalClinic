@@ -3,11 +3,11 @@ using WebApp_DentalClinic.Models;
 
 namespace WebApp_DentalClinic
 {
-    public class AppDbContext:DbContext
+    public class AppDbContext : DbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-            
+
         }
 
         public DbSet<User> Users { get; set; }
@@ -19,6 +19,10 @@ namespace WebApp_DentalClinic
         public DbSet<Terminet> Terminets { get; set; }
 
         public DbSet<Department> Departments { get; set; }
+        public DbSet<Inventary> Inventaries { get; set; }
+        public DbSet<Knowledge> Knowledges { get; set; }
+        public DbSet<Partner> Partners{ get; set; }
+
 
     }
 }
