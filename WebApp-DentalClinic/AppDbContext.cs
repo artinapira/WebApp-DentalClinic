@@ -23,6 +23,7 @@ namespace WebApp_DentalClinic
         public DbSet<Knowledge> Knowledges { get; set; }
         public DbSet<Partner> Partners{ get; set; }
 
+        public DbSet<Vlersimet> Vlersimett { get; set; }
 
     }
 }
