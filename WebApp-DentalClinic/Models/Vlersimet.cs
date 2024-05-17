@@ -2,7 +2,7 @@
 {
     public class Vlersimet
     {
-        public int VlersimiId { get; set; }
+        public int VlersimetId { get; set; }
         public string Sherbimi { get; set; }
         public string Sjellja { get; set; }
         public int DentistId { get; set; }

@@ -30,11 +30,11 @@ namespace WebApp_DentalClinic.Services
             return allvlersimet;
         }
 
-        public Vlersimet GetVlersimetById(int vlersimiId) => _context.Vlersimett.FirstOrDefault(n => n.VlersimiId == vlersimiId);
+        public Vlersimet GetVlersimetById(int vlersimiId) => _context.Vlersimett.FirstOrDefault(n => n.VlersimetId == vlersimiId);
 
         public Vlersimet UpdateVlersimetById(int vlersimiId, VlersimetVM vlersimi)
         {
-            var _vlersimi = _context.Vlersimett.FirstOrDefault(n => n.VlersimiId == vlersimiId);
+            var _vlersimi = _context.Vlersimett.FirstOrDefault(n => n.VlersimetId == vlersimiId);
             if (_vlersimi != null)
             {
                 _vlersimi.Sherbimi = vlersimi.Sherbimi;
@@ -49,7 +49,7 @@ namespace WebApp_DentalClinic.Services
 
         public void DeleteVlersimetById(int vlersimetId)
         {
-            var _vlersimet = _context.Vlersimett.FirstOrDefault(n => n.VlersimiId == vlersimetId);
+            var _vlersimet = _context.Vlersimett.FirstOrDefault(n => n.VlersimetId == vlersimetId);
             if (_vlersimet != null)
             {
                 _context.Vlersimett.Remove(_vlersimet);

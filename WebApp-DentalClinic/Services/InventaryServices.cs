@@ -28,11 +28,11 @@ namespace WebApp_DentalClinic.Services
             return allinventarys;
         }
 
-        public Inventary GetItemById(int itemId) => _context.Inventaries.FirstOrDefault(n => n.ItemID == itemId);
+        public Inventary GetItemById(int itemId) => _context.Inventaries.FirstOrDefault(n => n.InventaryID == itemId);
 
         public Inventary UpdateItemById(int itemId, InventaryVM inventari)
         {
-            var _inventari = _context.Inventaries.FirstOrDefault(n => n.ItemID == itemId);
+            var _inventari = _context.Inventaries.FirstOrDefault(n => n.InventaryID == itemId);
             if (_inventari != null)
             {
                 _inventari.Emri = inventari.Emri;
@@ -45,7 +45,7 @@ namespace WebApp_DentalClinic.Services
 
         public void DeleteItemById(int itemId)
         {
-            var _inventari = _context.Inventaries.FirstOrDefault(n => n.ItemID == itemId);
+            var _inventari = _context.Inventaries.FirstOrDefault(n => n.InventaryID == itemId);
             if (_inventari != null)
             {
                 _context.Inventaries.Remove(_inventari);

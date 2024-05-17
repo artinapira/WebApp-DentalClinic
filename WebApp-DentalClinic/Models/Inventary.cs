@@ -2,7 +2,7 @@
 {
     public class Inventary
     {
-        public int ItemID { get; set; }
+        public int InventaryID { get; set; }
 
         public string Emri { get; set; } = null!;
 

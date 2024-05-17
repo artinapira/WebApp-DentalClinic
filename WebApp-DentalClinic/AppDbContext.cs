@@ -19,11 +19,20 @@ namespace WebApp_DentalClinic
         public DbSet<Terminet> Terminets { get; set; }
 
         public DbSet<Department> Departments { get; set; }
+
         public DbSet<Inventary> Inventaries { get; set; }
+
         public DbSet<Knowledge> Knowledges { get; set; }
+
         public DbSet<Partner> Partners{ get; set; }
 
         public DbSet<Vlersimet> Vlersimett { get; set; }
+
+        public DbSet<Marketing> Marketings { get; set; }
+
+        public DbSet<PatientNote> PatientNotes { get; set; }
+
+        public DbSet<SherbimeShtese> SherbimeShteses { get; set; }
 
     }
 }
