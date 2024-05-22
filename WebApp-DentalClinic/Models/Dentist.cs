@@ -21,5 +21,15 @@
         public virtual Department Department { get; set; } = null!;
 
         public virtual ICollection<Terminet> Terminets { get; set; } = new List<Terminet>();
+
+        public virtual ICollection<Ankesat> Ankesats { get; set; } = new List<Ankesat>();
+
+        public virtual ICollection<Vlersimet> Vlersimets { get; set; } = new List<Vlersimet>();
+
+        public virtual ICollection<Inventary> Inventories { get; set; } = new List<Inventary>();
+
+        public virtual ICollection<Knowledge> Knowledges { get; set; } = new List<Knowledge>();
+
+        public virtual ICollection<Marketing> Marketings { get; set; } = new List<Marketing>();
     }
 }

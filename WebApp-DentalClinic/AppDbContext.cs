@@ -34,5 +34,13 @@ namespace WebApp_DentalClinic
 
         public DbSet<SherbimeShtese> SherbimeShteses { get; set; }
 
+        public DbSet<Prescription> Prescriptions { get; set; }
+
+        public DbSet<MedicalRecord> MedicalRecords { get; set; }
+
+        public DbSet<Terapia> Terapias { get; set; }
+
+        public DbSet<Ankesat> Ankesats { get; set; }
+
     }
 }
