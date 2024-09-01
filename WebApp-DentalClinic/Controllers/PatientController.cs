@@ -19,7 +19,7 @@ namespace WebApp_DentalClinic.Controllers
             _patientServices = patientServices;
         }
 
-        [Authorize(Roles = "Patient,Admin")]
+        [Authorize(Roles = "Admin,Dentist")]
         [HttpGet("/PatientAll")]
         public async Task<ActionResult<List<Patient>>> GetAllPatients()
         {
@@ -40,7 +40,7 @@ namespace WebApp_DentalClinic.Controllers
             return await _patientServices.GetSinglePatient(id);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Dentist")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Patient>> GetSinglePatient(int id)
         {

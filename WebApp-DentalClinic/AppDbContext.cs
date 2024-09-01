@@ -16,6 +16,8 @@ namespace WebApp_DentalClinic
 
         public DbSet<Dentist> Dentists { get; set; }
 
+        public DbSet<Admin> Admins { get; set; }
+
         public DbSet<Terminet> Terminets { get; set; }
 
         public DbSet<Department> Departments { get; set; }

@@ -129,6 +129,53 @@ namespace WebApp_DentalClinic.Services
 
             return response;
         }
+
+        public async Task<ServiceResponse<List<Admin>>> RegisterAdmin(UserAdminVM userAdminVM)
+        {
+            var response = new ServiceResponse<List<Admin>>();
+            Authentication auth = new Authentication();
+            if (await UserExists(userAdminVM.User.Email))
+            {
+                response.Success = false;
+                response.Message = "User with this email already exists";
+                return response;
+            }
+
+            // Create user with patient role
+            var user = new User
+            {
+                Username = userAdminVM.User.Username,
+                Email = userAdminVM.User.Email,
+                UserRole = Role.Admin
+            };
+
+            // Hash the password
+            auth.CreatePasswordHash(userAdminVM.User.Password, out byte[] passwordHash, out byte[] passwordSalt);
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
+
+            // Add user to database
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            // Create patient entity
+            var admin = new Admin
+            {
+                UserId = user.UserId,
+                EmriMbiemri = userAdminVM.Admin.EmriMbiemri,
+            };
+
+            // Add patient to database
+            _context.Admins.Add(admin);
+            await _context.SaveChangesAsync();
+
+            // Update response
+            response.Success = true;
+            response.Message = "Admin registered successfully";
+            response.Data = await _context.Admins.ToListAsync();
+
+            return response;
+        }
         public async Task<ServiceResponse<string>> DeleteUser(int userId)
         {
             var response = new ServiceResponse<string>();

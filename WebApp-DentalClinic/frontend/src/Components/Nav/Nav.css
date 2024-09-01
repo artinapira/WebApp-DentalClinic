@@ -1,0 +1,64 @@
+/* General Navbar Styles */
+.navbar {
+    background-color: #343a40; /* Dark background for the navbar */
+    padding: 1rem; /* Space around the navbar content */
+}
+
+.navbar-brand img {
+    height: 40px; /* Adjust logo size */
+}
+
+.nav-link {
+    color: white !important; /* White color for the links */
+    margin-right: 1rem; /* Space between the links */
+}
+
+.nav-link:hover {
+    color: #ddd !important; /* Slightly lighter color on hover */
+}
+
+/* Dropdown Menu */
+.navbar .dropdown-menu {
+    background-color: #343a40; /* Matching dropdown background with navbar */
+    border: none; /* Remove border */
+}
+
+.navbar .dropdown-menu .dropdown-item {
+    color: white; /* White text for dropdown items */
+    padding: 10px 20px; /* Padding inside dropdown items */
+}
+
+.navbar .dropdown-menu .dropdown-item:hover {
+    background-color: #495057; /* Darker background on hover */
+    color: #fff; /* White text on hover */
+}
+
+.navbar .dropdown-menu .dropdown-divider {
+    background-color: #495057; /* Darker line for the divider */
+}
+
+/* Log Out Icon */
+.navbar .LogOutPath {
+    display: flex;
+    align-items: center;
+    color: white !important; /* White text */
+}
+
+.navbar .LogOutPath:hover {
+    color: #ddd !important; /* Lighter color on hover */
+}
+
+.navbar .LogOutPath .icon {
+    margin-left: 5px; /* Space between text and icon */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .navbar-collapse {
+        background-color: #343a40; /* Match collapsed menu background */
+    }
+    
+    .navbar .nav-link {
+        margin-right: 0; /* Remove margin on smaller screens */
+    }
+}

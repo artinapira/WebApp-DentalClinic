@@ -51,6 +51,13 @@ namespace WebApp_DentalClinic.Controllers
             return Ok(result);
         }
 
+        [HttpPost("Admin")]
+        public async Task<ActionResult<List<User>>> RegisterAdmin(UserAdminVM userAdminVM)
+        {
+            var result = await _userServices.RegisterAdmin(userAdminVM);
+            return Ok(result);
+        }
+
         [HttpPost("Dentist")]
         public async Task<ActionResult<List<User>>> RegisterDentist(UserDentistVM userDentistVM)
         {

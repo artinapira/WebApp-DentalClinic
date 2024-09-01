@@ -19,7 +19,25 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddTransient<UserServices>();
 builder.Services.AddTransient<PatientServices>();
 builder.Services.AddTransient<DentistServices>();
+builder.Services.AddTransient<AdminServices>();
 builder.Services.AddTransient<TerminetServices>();
+builder.Services.AddTransient<AnkesatServices>();
+builder.Services.AddTransient<DepartmentServices>();
+builder.Services.AddTransient<MarketingServices>();
+builder.Services.AddTransient<InventaryServices>();
+builder.Services.AddTransient<KnowledgeServices>();
+builder.Services.AddTransient<MedicalRecordServices>();
+builder.Services.AddTransient<PartnerServices>();
+builder.Services.AddTransient<PatientNoteServices>();
+builder.Services.AddTransient<PrescriptionServices>();
+builder.Services.AddTransient<SherbimeShteseServices>();
+builder.Services.AddTransient<TerapiaServices>();
+builder.Services.AddTransient<VlersimetServices>();
+
+builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
+{
+    build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+}));
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -80,6 +98,7 @@ if (app.Environment.IsDevelopment())
 // Add other middleware and routing
 
 app.UseRouting();
+app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 
