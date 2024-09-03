@@ -88,7 +88,7 @@ namespace WebApp_DentalClinic.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<List<User>>> Login(Login request)
+        public async Task<ActionResult<ServiceResponse<string>>> Login(Login request)
         {
             var response = await _userServices.Login(request.Email, request.Password);
             if (!(bool)response.Success)
