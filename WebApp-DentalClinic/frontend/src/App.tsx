@@ -13,9 +13,9 @@ function App() {
     <Router>
 
             <Routes>
-                <Route path="/home" element={<Home/>} />
-                <Route path="/home" element={<Home/>}/>
-                <Route path="/footer" element={<Footer />} />
+                <Route path="/Home" element={<Home/>} />
+                <Route path="/Home" element={<Home/>}/>
+                <Route path="/Footer" element={<Footer />} />
               
 
 

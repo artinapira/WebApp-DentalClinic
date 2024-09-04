@@ -118,7 +118,7 @@ export default function authReducer(state = initialState, { type, payload }) {
                 }
             };
 
-        case types.GET_MEDICAL_RECORD_SUCCESS:
+        case types.GET_MEDICALRECORD_SUCCESS:
             return {
                 ...state,
                 data: {
@@ -127,7 +127,7 @@ export default function authReducer(state = initialState, { type, payload }) {
                 }
             };
 
-        case types.GET_PATIENT_NOTE_SUCCESS:
+        case types.GET_PATIENTNOTE_SUCCESS:
             return {
                 ...state,
                 data: {
