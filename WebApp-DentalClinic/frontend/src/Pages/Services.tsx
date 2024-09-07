@@ -1,4 +1,5 @@
-import './Services.css';
+import React from 'react';
+import './CSS/Services.css';
 import bracesIcon from '../Assets/braces.png';
 import implantIcon from '../Assets/implants.png';
 import teethIcon from '../Assets/teeth-removal.png';
