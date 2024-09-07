@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="frontend\src\Components\img\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 

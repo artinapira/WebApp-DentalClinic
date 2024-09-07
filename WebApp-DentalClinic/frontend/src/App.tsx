@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import Footer from './Components/Footer/Footer';
 import Home from './Pages/Home';
+import { Services } from './Components/Services'
 import {
   BrowserRouter as Router,
   Routes,
@@ -9,7 +10,10 @@ import {
 } from "react-router-dom";
 
 function App() {
-  return (
+    return (
+   <div className="App">
+      <Services/>
+   </div>
     <Router>
 
             <Routes>
@@ -22,7 +26,8 @@ function App() {
 
 
             </Routes>
-        </Router>
+      </Router>
+
 
   );
 }

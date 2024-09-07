@@ -1,0 +1,254 @@
+body{
+    background-color:rgb(226, 246, 246)
+}
+.services-container {
+    text-align: center; 
+    margin-top: 20px; 
+    border-radius: 8px;
+  }
+  .services-container h3 {
+    margin: 0; 
+    font-size: 50px;
+    font-weight: bold; 
+    color:black;
+    font-family:serif;
+  }
+  .squares-container {
+    display: flex;
+    justify-content: space-around; 
+    margin-top: 40px; 
+    position: relative;
+  }
+  
+ .implant-icon {
+    width: 90%; 
+    height: 90%; 
+    object-fit: contain; 
+    display: block; 
+    margin: 0 auto; 
+    
+  }
+  .braces-container {
+    position: absolute;
+    top: 80%; 
+    left: 5%; 
+    transform: translateY(-50%); 
+  }
+ .braces-icon {
+    transform: scale(1.2);
+    object-fit: contain;
+    display: block;
+    margin:  0 auto;
+
+  }
+ .teeth-container{
+    position: absolute;
+    top: 80%;
+    left: 5%;
+    transform: translate(-50%);
+ }
+ .bridges-crowns-container{
+    position: absolute;
+    top: 80%;
+    left: 5%;
+    transform: translate(-50%);
+ }
+ .checkup-container{
+    position: absolute;
+    top: 80%;
+    left: 5%;
+    transform: translate(-50%);
+ }
+ .whitening-teeth-container{
+    position: absolute;
+    top: 80%;
+    left: 5%;
+    transform: translate(-50%);
+ }
+ .root-canal-container{
+    position: absolute;
+    top: 80%;
+    left: 5%;
+    transform: translate(-50%);
+ }
+ .cleaning-teeth-contanier{
+    position: absolute;
+    top: 80%;
+    left: 5%;
+    transform: translate(-50%);
+ }
+ .teeth-icon{
+    width: 120%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    
+ }
+ .bridges-crowns-icon{
+    width: 120%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+ }
+ .checkup-icon{
+    width: 120%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+ }
+ .whitening-teeth-icon{
+    width: 120%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+ }
+ .root-canal-icon{
+    width: 100%;
+    height: 40%;
+    object-fit: contain;
+    display:block
+ }
+ .cleaning-teeth-icon{
+    width: 120%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+ }
+
+ .square1 {
+    position: fixed;
+    width: 170px; 
+    height: 160px;
+    right: 80%;
+    background-color:cadetblue; 
+    display: flex;
+    flex-direction: column;
+    justify-content:left;
+    margin-top: 40px; 
+    border-radius: 8px; 
+    transition: background-color  0.3s ease; 
+  }
+  .square2{
+    width: 170px;
+    height: 160px;
+    background-color: cadetblue;
+    display: flex;
+    flex-direction: column;
+    margin-top: 40px;
+    justify-content: center;
+    position: fixed;
+    border-radius: 8px;
+    transition: background-color  0.3s ease; 
+    margin-right: 25%;
+
+
+  }
+  .square3{
+
+        margin-top: 40px; 
+        width: 170px;
+        height: 160px;
+        background-color: cadetblue;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        flex-direction: column;
+        margin-left: 49%;
+        transition: background-color  0.3s ease; 
+
+    
+    }
+    .square4{
+        margin-top: 40px; 
+        width: 170px;
+        height: 160px;
+        background-color: cadetblue;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        margin-right: 40px;
+        flex-direction: column;
+        transition: background-color  0.3s ease; 
+
+    }
+    .square5{
+        position: fixed;
+        width: 170px; 
+        height: 160px; 
+        right: 80%;
+        background-color:cadetblue; 
+        display: flex;
+        flex-direction: column;
+        justify-content:left;
+        margin-top: 260px; 
+        border-radius: 8px; 
+        transition: background-color  0.3s ease; 
+
+       
+    }
+    .square6{
+        width: 170px;
+        height: 160px;
+        background-color: cadetblue;
+        display: flex;
+        flex-direction: column;
+        margin-top: 260px;
+        right: 56%;
+        justify-content: center;
+        position: fixed;
+        border-radius: 8px;
+        
+    
+      }
+      .square7{
+
+        margin-top: 260px;
+        width: 170px;
+        height: 160px;
+        background-color: cadetblue;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        flex-direction: column;
+        margin-left: 22%;
+        position: fixed;
+        transition: background-color  0.3s ease; 
+
+    
+    }
+    .square8{
+        margin-top: 260px; 
+        width: 160px;
+        height: 160px;
+        background-color: cadetblue;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        margin-left: 70%;
+        flex-direction: column;
+        position: fixed;
+        transition: background-color  0.3s ease; 
+
+       
+    }
+    .square1 img,.square2 img, .square3 img,.square4 img,.square5 img,.square6 img,.square7 img,.square8 img {
+        width: 100%;
+        height: 80%;
+        object-fit: contain;
+        display: block; 
+        margin: 0 auto; 
+      }
+
+    .square1 p, .square2 p, .square3 p ,.square4 p,.square5 p,.square6 p,.square7 p,.square8 p{
+        margin-top: 10px;
+        font-weight: bold;
+        font-size: 15px;
+    }
+    .square:hover, .square1:hover, .square2:hover, .square3:hover,.square4:hover,.square5:hover,.square6:hover,.square7:hover,.square8:hover {
+        background-color:paleturquoise; 
+    }
+    
