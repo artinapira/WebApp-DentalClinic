@@ -1,8 +1,36 @@
 import * as types from './types';
 
+interface UserLoginState {
+    loading: boolean;
+    error: boolean;
+    message: string;
+}
+
+interface DataState {
+    token1: string | null;
+    user1: any | null;
+    dentist: any | null;
+    admin: any | null;
+    ankesat: any | null;
+    department: any | null;
+    medicalrecord: any | null;
+    patientnote: any | null;
+    prescription: any | null;
+    terapia: any | null;
+    terminet: any | null;
+    vlersimet: any | null;
+}
+
+interface InitialState {
+    userLogin: UserLoginState;
+    userLogout: { message: string };
+    data: DataState;
+    message: string;
+}
+
 const token1 = localStorage.getItem("token1");
 
-const initialState = {
+const initialState: InitialState = {
     userLogin: {
         loading: false,
         error: false,
@@ -26,7 +54,12 @@ const initialState = {
     message: ""
 }
 
-export default function authReducer(state = initialState, { type, payload }) {
+interface Action {
+    type: string;
+    payload?: any;
+}
+
+export default function authReducer(state = initialState, { type, payload }: Action): InitialState {
     switch (type) {
         case types.LOGIN_USER_REQUEST:
         case types.LOGIN_DENTIST_REQUEST:

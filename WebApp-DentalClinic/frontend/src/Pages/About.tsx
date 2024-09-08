@@ -1,4 +1,3 @@
-
 import about1 from '../Assets/img1.jpg';
 import about2 from '../Assets/img2.jpg';
 import about3 from '../Assets/img3.jpg';
@@ -36,12 +35,12 @@ function About() {
                             <div className="heading-bx">
                                 <h6>About Us</h6>
                                 <h2 className="title">
-                                    The Great Place Of Medical Hospital Center
+                                    The Great Place Of Dental Clinic Center
                                 </h2>
                                 <p>
-                                    We provide the special tips and advices of heath care
+                                    We provide the special tips and advices of teeth care
                                     treatment and high level of best technology involve in the our
-                                    hospital.
+                                    clinic.
                                 </p>
                             </div>
                             

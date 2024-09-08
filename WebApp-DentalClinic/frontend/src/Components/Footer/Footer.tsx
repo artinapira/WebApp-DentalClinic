@@ -1,17 +1,16 @@
 import React from 'react';
-import logo from '../../Assets/logoo.png'
+import logo from '../../Assets/logoo.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPhone } from '@fortawesome/free-solid-svg-icons';
-const Footer = () => {
+import './Footer.css'
 
+const Footer: React.FC = () => {
     return (
         <footer>
-
             <div className="container">
                 <div className="row">
                     <div className="col-md-3 col-sm-6">
-                        <img src={logo} className="footerlogo" />
-                        <p>We Provide Teeth Care Solution</p>
+                        <img src={logo} className="footerlogo" alt="Company Logo" />
                         <div className="footer-contact">
                             <div className="footer-icon">
                                 <FontAwesomeIcon icon={faPhone} />
@@ -42,8 +41,8 @@ const Footer = () => {
                     <div className="col-md-3 col-sm-6">
                         <h2>Subscribe</h2>
                         <form>
-                            <input type="email" placeholder="Enter Email"></input>
-                            <button type="submit">Subsribe</button>
+                            <input type="email" placeholder="Enter Email" />
+                            <button type="submit">Subscribe</button>
                         </form>
                     </div>
                 </div>
@@ -56,16 +55,10 @@ const Footer = () => {
                             <span>Copyright 2024</span>
                         </div>
                     </div>
-
                 </div>
             </div>
         </footer>
-
-
-    )
+    );
 };
-
-
-
 
 export default Footer;

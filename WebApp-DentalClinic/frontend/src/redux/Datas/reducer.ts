@@ -1,6 +1,31 @@
 import * as types from "./types";
 
-const initialState = {
+
+interface DataState {
+    loading: boolean;
+    error: boolean;
+    message: string;
+    dentists: any[];
+    admins: any[];
+    patients: any[];
+    ankesats: any[];
+    dashboard: any[];
+    departments: any[];
+    inventaries: any[];
+    knowledges: any[];
+    marketings: any[];
+    medicalrecords: any[];
+    partners: any[];
+    patientnotes: any[];
+    prescriptions: any[];
+    sherbimeshteses: any[];
+    terapias: any[];
+    terminets: any[];
+    vlersimets: any[];
+    kontaktet: any[],
+  }
+
+const initialState: DataState = {
     loading: false,
     error: false,
     dentists: [],
@@ -20,12 +45,17 @@ const initialState = {
     terapias:[],
     terminets:[],
     vlersimets:[],
+    kontaktet: [],
     message: ""
 
 };
+interface Action {
+    type: string;
+    payload?: any;
+}
 
 
-export default function dataReducer(state = initialState, { type, payload }) {
+export default function dataReducer(state = initialState, { type, payload }: Action): DataState {
     switch (type) {
         case types.GET_PATIENT_SUCCESS:
             return {
@@ -258,6 +288,7 @@ export default function dataReducer(state = initialState, { type, payload }) {
             }
 
         case types.GET_DENTIST_SUCCESS:
+            console.log("Dentists fetched:", payload); 
             return {
                 ...state,
                 loading: false,
@@ -303,6 +334,19 @@ export default function dataReducer(state = initialState, { type, payload }) {
                 ...state,
                 loading:false,
                 dentists:payload
+            }
+
+        case types.GET_KONTAKTI_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                kontaktet: payload
+            }
+        case types.DELETE_KONTAKTI_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                kontaktet: payload
             }
 
         default:

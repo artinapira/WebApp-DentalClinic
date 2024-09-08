@@ -2,7 +2,11 @@ import React from 'react';
 import './App.css';
 import Footer from './Components/Footer/Footer';
 import Home from './Pages/Home';
-import { Services } from './Pages/Services'
+import ContactUs from './Pages/ContactUs';
+import Service from './Pages/Service';
+import Dentists from './Pages/Dentists';
+import Login from './Pages/Login';
+
 import {
   BrowserRouter as Router,
   Routes,
@@ -10,23 +14,22 @@ import {
 } from "react-router-dom";
 
 function App() {
-    return (
-   <><div className="App">
-        <Services />
-      </div><Router>
+  return (
+    <Router>
 
-          <Routes>
+            <Routes>
+            <Route path="/" element={<Login />} />
             <Route path="/Home" element={<Home />} />
-            <Route path="/Home" element={<Home />} />
-            <Route path="/Footer" element={<Footer />} />
+            <Route path="/footer" element={<Footer />} />
+            <Route path="/Contactus" element={<ContactUs/>}/>
+            <Route path="/Service" element={<Service/>}/>
+            <Route path="/Dentists" element={<Dentists/>}/>
 
 
 
 
-
-          </Routes>
-        </Router></>
-
+            </Routes>
+        </Router>
 
   );
 }

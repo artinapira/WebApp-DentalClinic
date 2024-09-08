@@ -33,6 +33,7 @@ builder.Services.AddTransient<PrescriptionServices>();
 builder.Services.AddTransient<SherbimeShteseServices>();
 builder.Services.AddTransient<TerapiaServices>();
 builder.Services.AddTransient<VlersimetServices>();
+builder.Services.AddTransient<KontaktiServices>();
 
 builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
 {

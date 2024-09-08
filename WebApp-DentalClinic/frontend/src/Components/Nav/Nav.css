@@ -4,8 +4,18 @@
     padding: 1rem; /* Space around the navbar content */
 }
 
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    margin-right: auto; /* Push the logo to the left */
+}
+
 .navbar-brand img {
     height: 40px; /* Adjust logo size */
+}
+
+.navbar-nav {
+    margin-left: auto; /* Push links to the right */
 }
 
 .nav-link {
@@ -21,6 +31,8 @@
 .navbar .dropdown-menu {
     background-color: #343a40; /* Matching dropdown background with navbar */
     border: none; /* Remove border */
+    margin-left: -3rem; /* Adjust this value as needed */
+    transform: translateX(-3rem); /* Adjust this value as needed */
 }
 
 .navbar .dropdown-menu .dropdown-item {
@@ -60,5 +72,10 @@
     
     .navbar .nav-link {
         margin-right: 0; /* Remove margin on smaller screens */
+    }
+
+    .navbar .dropdown-menu {
+        margin-left: 0; /* Reset margin for smaller screens */
+        transform: none; /* Reset transform for smaller screens */
     }
 }

@@ -44,5 +44,7 @@ namespace WebApp_DentalClinic
 
         public DbSet<Ankesat> Ankesats { get; set; }
 
+        public DbSet<Kontakti> Kontaktis { get; set; }
+
     }
 }

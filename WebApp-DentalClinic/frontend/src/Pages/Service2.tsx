@@ -1,9 +1,8 @@
 import React from 'react';
 
 
-function Services2() {
+const Service2: React.FC = () => {
     return (
-        <div>
             <section className="section-sp1 service-wraper2">
                 <div className="margn"></div>
                 <div className="container">
@@ -25,7 +24,7 @@ function Services2() {
                         <div className="col-xl-3 col-sm-6 mb-30">
                             <div className="feature-container feature-bx3">
                                 <h2 className="counter">25+</h2>
-                                <h5 className="ttr-title">Doctors</h5>
+                                <h5 className="ttr-title">Dentists</h5>
 
                             </div>
                         </div>
@@ -40,8 +39,7 @@ function Services2() {
                 </div>
                 <div className="margn"></div>
             </section>
-        </div>
     );
 }
 
-export default Services2;
+export default Service2;
