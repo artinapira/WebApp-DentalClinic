@@ -19,14 +19,13 @@ namespace WebApp_DentalClinic.Controllers
             _patientServices = patientServices;
         }
 
-        [Authorize(Roles = "Admin,Dentist")]
-        [HttpGet("/PatientAll")]
-        public async Task<ActionResult<List<Patient>>> GetAllPatients()
+        [HttpGet("PatientAll")]
+        public async Task<ActionResult<List<Patient>>> GetAllPatient()
         {
-            var result = await _patientServices.GetAllPatients();
+            var result = await _patientServices.GetAllPatient();
             if (result == null)
             {
-                return NotFound("Patient not found");
+                return NotFound("No pacient was found");
             }
             return Ok(result);
         }
@@ -40,33 +39,42 @@ namespace WebApp_DentalClinic.Controllers
             return await _patientServices.GetSinglePatient(id);
         }
 
-        [Authorize(Roles = "Admin,Dentist")]
-        [HttpGet("{id}")]
+
+        [HttpGet("GetPatient/{id}")]
         public async Task<ActionResult<Patient>> GetSinglePatient(int id)
         {
             var result = await _patientServices.GetSinglePatient(id);
             if (result == null)
             {
-                return NotFound("Patient not found");
+                return NotFound("Pacienti not found");
             }
             return Ok(result);
         }
 
-        [Authorize(Roles = "Patient,Admin")]
-        [HttpPut("{id}")]
-        public async Task<ActionResult<List<Patient>>> UpdatePatient(int id, PatientVM patient)
+        [Authorize(Roles = "Admin,Patient")]
+        [HttpPut("PatientUpdate/{id}")]
+        public async Task<ActionResult<Patient>> UpdatePatient(int id, PatientVM pacienti)
         {
-            var result = await _patientServices.UpdatePatient(id, patient);
+            var result = await _patientServices.UpdatePatient(id, new Patient
+            {
+                EmriMbiemri = pacienti.EmriMbiemri,
+                DataLindjes = pacienti.DataLindjes,
+                Gjinia = pacienti.Gjinia,
+                Username = pacienti.Username,
+                Email = pacienti.Email,
 
+
+
+            });
             if (result == null)
             {
-                return NotFound("Patient not found");
+                return NotFound("Pacienti not found");
             }
             return Ok(result);
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("{id}")]
+        [HttpDelete("PatientDelete/{id}")]
         public async Task<ActionResult<List<Patient>>> DeletePatient(int id)
         {
             var result = await _patientServices.DeletePatient(id);
@@ -83,6 +91,27 @@ namespace WebApp_DentalClinic.Controllers
                 return BadRequest(response);
             }
             return Ok(response);
+        }
+
+
+        [HttpPost("add-patient")]
+        public async Task<ActionResult<List<Patient>>> AddPatient(PatientVM pacienti)
+        {
+
+            var result = await _patientServices.AddPatient(
+                new Patient
+                {
+                    EmriMbiemri = pacienti.EmriMbiemri,
+                    DataLindjes = pacienti.DataLindjes,
+                    Gjinia = pacienti.Gjinia,
+                    Username = pacienti.Username,
+                    Email = pacienti.Email,
+
+
+
+                }
+                , pacienti.Password);
+            return Ok(result);
         }
     }
 }

@@ -17,41 +17,60 @@ namespace WebApp_DentalClinic.Services
             _configuration = configuration;
         }
 
-        public async Task<ServiceResponse<string>> DeleteAdmin(int userId)
+        public async Task<bool> AdminExists(string email)
         {
-            var response = new ServiceResponse<string>();
-
-            var user = await _context.Users.FindAsync(userId);
-
-            if (user == null)
+            if (await _context.Admins.AnyAsync(m => m.Email!.ToLower() == email.ToLower()))
             {
-                response.Success = false;
-                response.Message = "User not found";
+                return true;
+            }
+            return false;
+        }
+
+
+        public async Task<ServiceResponse<List<Admin>?>> AddAdmin(Admin recepsionisti, string password)
+        {
+
+            var response = new ServiceResponse<List<Admin>>();
+            Authentication auth = new Authentication();
+            if (await AdminExists(recepsionisti.Email))
+            {
+                response.Success = true;
+                response.Message = "recepsionisti exists";
                 return response;
             }
+            auth.CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
 
-            var admin = await _context.Admins.FirstOrDefaultAsync(p => p.UserId == userId);
-            if (admin != null)
-            {
-                _context.Admins.Remove(admin);
-            }
-
-            _context.Users.Remove(user);
+            recepsionisti.PasswordHash = passwordHash;
+            recepsionisti.PasswordSalt = passwordSalt;
+            _context.Admins.Add(recepsionisti);
             await _context.SaveChangesAsync();
-
+            response.Data = await _context.Admins.ToListAsync();
+            return response;
+        }
+        public async Task<ServiceResponse<List<Admin>?>> DeleteAdmin(int id)
+        {
+            var response = new ServiceResponse<List<Admin>>();
+            var Recepsionisti = await _context.Admins.FindAsync(id);
+            if (Recepsionisti == null)
+            {
+                return null;
+            }
+            _context.Admins.Remove(Recepsionisti);
+            await _context.SaveChangesAsync();
             response.Success = true;
-            response.Message = "Admin deleted successfully";
+            response.Message = "Admin returned";
+            response.Data = await _context.Admins.ToListAsync();
             return response;
         }
 
-        public async Task<ServiceResponse<List<Admin>?>> GetAllAdmins()
+        public async Task<ServiceResponse<List<Admin>?>> GetAllAdmin()
         {
 
             var response = new ServiceResponse<List<Admin>>();
 
-            var admin = await _context.Admins.ToListAsync();
+            var Recepsionisti = await _context.Admins.ToListAsync();
 
-            if (admin == null)
+            if (Recepsionisti == null)
             {
 
                 response.Success = false;
@@ -60,64 +79,69 @@ namespace WebApp_DentalClinic.Services
             }
             response.Success = true;
             response.Message = "Admin returned";
-            response.Data = admin;
+            response.Data = Recepsionisti;
             return response;
         }
 
+
         public async Task<Admin?> GetSingleAdmin(int id)
         {
-            var admin = await _context.Admins.FindAsync(id);
-            if (admin == null)
+            var Recepsionisti = await _context.Admins.FindAsync(id);
+            if (Recepsionisti == null)
             {
                 return null;
             }
-            return admin;
+            return Recepsionisti;
         }
 
-        public async Task<Admin> UpdateAdmin(int id, AdminVM request)
+        public async Task<List<Admin>?> UpdateAdmin(int id, Admin request)
         {
-            var admin = await _context.Admins.FindAsync(id);
-            if (admin == null) return null;
-            admin.EmriMbiemri = request.EmriMbiemri;
-            await _context.SaveChangesAsync();
+            var Recepsionisti = await _context.Admins.FindAsync(id);
+            if (Recepsionisti == null) return null;
+            Recepsionisti.EmriMbiemri = request.EmriMbiemri;
+            Recepsionisti.Username = request.Username;
+            Recepsionisti.Email = request.Email;
 
-            return admin;
+            await _context.SaveChangesAsync();
+            return await _context.Admins.ToListAsync();
+
+
         }
 
         public async Task<ServiceResponse<string>> Login(string email, string password)
         {
             var response = new ServiceResponse<string>();
             Authentication auth = new Authentication();
-            var user = await _context.Users.FirstOrDefaultAsync(m => m.Email.ToLower().Equals(email.ToLower()));
-            if (user is null)
+            var recepsionisti = await _context.Admins.FirstOrDefaultAsync(m => m.Email.ToLower().Equals(email.ToLower()));
+            if (recepsionisti is null)
             {
                 response.Success = false;
-                response.Message = "user not found";
+                response.Message = "recepsionisti not found";
+
             }
-            else if (!auth.VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
+            else if (!auth.VerifyPasswordHash(password, recepsionisti.PasswordHash, recepsionisti.PasswordSalt))
             {
                 response.Success = false;
                 response.Message = "Password incorrect";
             }
             else
             {
+
                 response.Success = true;
                 response.Message = "Logged in successfully";
-                response.Data = CreateToken(user);
-                response.Success = true;
-                response.Message = "Logged in successfully";
+                response.Data = CreateToken(recepsionisti);
             }
             return response;
         }
 
-        private string CreateToken(User user)
+        private string CreateToken(Admin recepsionisti)
         {
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-                new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Role, user.UserRole.ToString())
+                new Claim(ClaimTypes.NameIdentifier, recepsionisti.AdminId.ToString()),
+                new Claim(ClaimTypes.Name, recepsionisti.EmriMbiemri),
+                new Claim(ClaimTypes.Role, "Admin")
 
             };
 
@@ -141,6 +165,8 @@ namespace WebApp_DentalClinic.Services
             SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(token);
+
+
         }
     }
 }

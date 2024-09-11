@@ -1,0 +1,33 @@
+.dentist-profile {
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+}
+
+.profile-info {
+    margin-bottom: 20px;
+}
+
+.profile-info p {
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+.edit-btn, .add-btn {
+    margin-right: 10px;
+}
+
+.edit-btn {
+    background-color: #1890ff;
+    color: #fff;
+}
+
+.add-btn {
+    background-color: #52c41a;
+    color: #fff;
+}
+
+.ant-modal-footer {
+    display: flex;
+    justify-content: space-between;
+}

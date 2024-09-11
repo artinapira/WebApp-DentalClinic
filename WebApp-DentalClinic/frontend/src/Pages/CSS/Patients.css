@@ -1,0 +1,44 @@
+.background {
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.patient-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.patient-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 300px;
+}
+
+.patient-card h2 {
+    margin-top: 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.patient-card p {
+    margin: 5px 0;
+    color: #555;
+}
+
+.patient-card button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.patient-card button:hover {
+    background-color: #0056b3;
+}

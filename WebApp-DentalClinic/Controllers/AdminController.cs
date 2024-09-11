@@ -20,12 +20,12 @@ namespace WebApp_DentalClinic.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpGet("/AdminAll")]
-        public async Task<ActionResult<List<Admin>>> GetAllAdmins()
+        public async Task<ActionResult<List<Admin>>> GetAllAdmin()
         {
-            var result = await _adminServices.GetAllAdmins();
+            var result = await _adminServices.GetAllAdmin();
             if (result == null)
             {
-                return NotFound("Admin not found");
+                return NotFound("No admin was found");
             }
             return Ok(result);
         }
@@ -53,10 +53,16 @@ namespace WebApp_DentalClinic.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
-        public async Task<ActionResult<List<Admin>>> UpdateAdmin(int id, AdminVM admin)
+        public async Task<ActionResult<List<Admin>>> UpdateAdmin(int id, AdminVM recepsionisti)
         {
-            var result = await _adminServices.UpdateAdmin(id, admin);
 
+            var result = await _adminServices.UpdateAdmin(id, new Admin
+            {
+                EmriMbiemri = recepsionisti.EmriMbiemri,
+                Username = recepsionisti.Username,
+                Email = recepsionisti.Email,
+
+            });
             if (result == null)
             {
                 return NotFound("Admin not found");
@@ -83,6 +89,25 @@ namespace WebApp_DentalClinic.Controllers
             }
             return Ok(response);
         }
+
+
+
+        [HttpPost]
+        public async Task<ActionResult<List<Admin>>> AddAdmin(AdminVM recepsionisti)
+        {
+            var result = await _adminServices.AddAdmin(
+                 new Admin
+                 {
+                     EmriMbiemri = recepsionisti.EmriMbiemri,
+                     Username = recepsionisti.Username,
+                     Email = recepsionisti.Email,
+
+
+                 }
+                 , recepsionisti.Password);
+            return Ok(result);
+        }
+
     }
 }
 

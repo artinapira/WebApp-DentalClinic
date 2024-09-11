@@ -6,8 +6,10 @@
 
         public string EmriMbiemri { get; set; } = null!;
 
-        public int UserId { get; set; }
 
-        public virtual User User { get; set; } = null!;
+        public string Username { get; set; }
+        public string Email { get; set; }
+        public byte[] PasswordHash { get; set; } = null!;
+        public byte[] PasswordSalt { get; set; } = null!;
     }
 }

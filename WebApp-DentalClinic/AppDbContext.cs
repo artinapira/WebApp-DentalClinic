@@ -10,8 +10,6 @@ namespace WebApp_DentalClinic
 
         }
 
-        public DbSet<User> Users { get; set; }
-
         public DbSet<Patient> Patients { get; set; }
 
         public DbSet<Dentist> Dentists { get; set; }

@@ -63,6 +63,10 @@
 .navbar .LogOutPath .icon {
     margin-left: 5px; /* Space between text and icon */
 }
+.navbar .dropdown-toggle::after {
+    display: none; /* Hide the default arrow */
+}
+
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {

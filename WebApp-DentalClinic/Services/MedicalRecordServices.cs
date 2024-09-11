@@ -1,5 +1,7 @@
 ﻿using WebApp_DentalClinic.Models;
 using WebApp_DentalClinic.ViewModels;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace WebApp_DentalClinic.Services
 {
@@ -26,10 +28,22 @@ namespace WebApp_DentalClinic.Services
             _context.SaveChanges();
         }
 
-        public List<MedicalRecord> GetAllMedicalRecord()
+        public List<MedicalRecordVM> GetAllMedicalRecord()
         {
-            var allMedicalRecord = _context.MedicalRecords.ToList();
-            return allMedicalRecord;
+            var allMedicalRecords = _context.MedicalRecords
+                .Include(m => m.Patient)
+                .Include(m => m.Terapias)
+                .Select(mr => new MedicalRecordVM
+                {
+                    Pershkrimi = mr.Pershkrimi,
+                    Simptomat = mr.Simptomat,
+                    Diagnoza = mr.Diagnoza,
+                    Rezultati = mr.Rezultati,
+                    PatientId = mr.Patient.PatientId,
+                })
+                .ToList();
+
+            return allMedicalRecords;
         }
 
         public MedicalRecord GetMedicalRecordById(int medicalRecordId) => _context.MedicalRecords.FirstOrDefault(n => n.MedicalRecordId == medicalRecordId);

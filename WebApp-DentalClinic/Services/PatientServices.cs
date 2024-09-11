@@ -11,115 +11,119 @@ namespace WebApp_DentalClinic.Services
     {
         private AppDbContext _context;
         private readonly IConfiguration _configuration;
+
         public PatientServices(AppDbContext context, IConfiguration configuration)
         {
             _context = context;
             _configuration = configuration;
         }
 
-        public async Task<ServiceResponse<string>> DeletePatient(int userId)
+        public async Task<bool> PatientExists(string email)
         {
-            var response = new ServiceResponse<string>();
-
-            var user = await _context.Users.FindAsync(userId);
-
-            if (user == null)
+            if (await _context.Patients.AnyAsync(m => m.Email!.ToLower() == email.ToLower()))
             {
-                response.Success = false;
-                response.Message = "User not found";
-                return response;
+                return true;
             }
-
-            var patient = await _context.Patients.FirstOrDefaultAsync(p => p.UserId == userId);
-            if (patient != null)
-            {
-                _context.Patients.Remove(patient); 
-            }
-
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-
-            response.Success = true;
-            response.Message = "User deleted successfully";
-            return response;
+            return false;
         }
 
-        public async Task<ServiceResponse<List<Patient>?>> GetAllPatients()
+        public async Task<ServiceResponse<List<Patient>?>> AddPatient(Patient pacienti, string password)
         {
 
             var response = new ServiceResponse<List<Patient>>();
-
-            var patient = await _context.Patients.ToListAsync();
-
-            if (patient == null)
+            Authentication auth = new Authentication();
+            if (await PatientExists(pacienti.Email))
             {
-
-                response.Success = false;
-                response.Message = "Patient doesnt exists";
+                response.Success = true;
+                response.Message = "pacienti already exists";
                 return response;
             }
-            response.Success = true;
-            response.Message = "Patient returned";
-            response.Data = patient;
+            auth.CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
+
+            pacienti.PasswordHash = passwordHash;
+            pacienti.PasswordSalt = passwordSalt;
+            _context.Patients.Add(pacienti);
+            await _context.SaveChangesAsync();
+            response.Data = await _context.Patients.ToListAsync();
             return response;
+        }
+        public async Task<List<Patient>?> DeletePatient(int id)
+        {
+            var pacienti = await _context.Patients.FindAsync(id);
+            if (pacienti == null)
+            {
+                return null;
+            }
+
+            _context.Patients.Remove(pacienti);
+            await _context.SaveChangesAsync();
+            return await _context.Patients.ToListAsync();
+        }
+
+        public async Task<List<Patient>> GetAllPatient()
+        {
+            var pacientat = await _context.Patients.ToListAsync();
+            return pacientat;
         }
 
         public async Task<Patient?> GetSinglePatient(int id)
         {
-            var patient = await _context.Patients.FindAsync(id);
-            if (patient == null)
+            var pacienti = await _context.Patients.FindAsync(id);
+            if (pacienti == null)
             {
                 return null;
             }
-            return patient;
+            return pacienti;
         }
 
-        public async Task<Patient> UpdatePatient(int id, PatientVM request)
+        public async Task<Patient> UpdatePatient(int id, Patient request)
         {
-            var patient = await _context.Patients.FindAsync(id);
-            if (patient == null) return null;
-            patient.EmriMbiemri = request.EmriMbiemri;
-            patient.DataLindjes = request.DataLindjes;
-            patient.Gjinia = request.Gjinia;
+            var pacienti = await _context.Patients.FindAsync(id);
+            if (pacienti == null) return null;
+            pacienti.EmriMbiemri = request.EmriMbiemri;
+            pacienti.DataLindjes = request.DataLindjes;
+            pacienti.Gjinia = request.Gjinia;
+            pacienti.Username = request.Username;
+            pacienti.Email = request.Email;
             await _context.SaveChangesAsync();
+            return pacienti;
 
-            return patient;
+
+
         }
 
         public async Task<ServiceResponse<string>> Login(string email, string password)
         {
             var response = new ServiceResponse<string>();
             Authentication auth = new Authentication();
-            var user = await _context.Users.FirstOrDefaultAsync(m => m.Email.ToLower().Equals(email.ToLower()));
-            if (user is null)
+            var pacienti = await _context.Patients.FirstOrDefaultAsync(m => m.Email.ToLower().Equals(email.ToLower()));
+            if (pacienti is null)
             {
                 response.Success = false;
-                response.Message = "user not found";
+                response.Message = "pacienti not found";
             }
-            else if (!auth.VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
+            else if (!auth.VerifyPasswordHash(password, pacienti.PasswordHash, pacienti.PasswordSalt))
             {
                 response.Success = false;
                 response.Message = "Password incorrect";
             }
             else
             {
+                response.Data = CreateToken(pacienti);
                 response.Success = true;
-                response.Message = "Logged in successfully";
-                response.Data = CreateToken(user);
-                response.Success = true;
-                response.Message = "Logged in successfully";
+                response.Message = "Login Successful.";
             }
             return response;
         }
 
-        private string CreateToken(User user)
+        private string CreateToken(Patient pacienti)
         {
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-                new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Role, user.UserRole.ToString())
+                new Claim(ClaimTypes.NameIdentifier, pacienti.PatientId.ToString()),
+                new Claim(ClaimTypes.Name, pacienti.EmriMbiemri),
+                new Claim(ClaimTypes.Role, "Patient")
 
             };
 
@@ -143,6 +147,8 @@ namespace WebApp_DentalClinic.Services
             SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(token);
+
+
         }
     }
 }

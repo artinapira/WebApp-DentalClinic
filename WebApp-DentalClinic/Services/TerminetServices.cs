@@ -18,7 +18,6 @@ namespace WebApp_DentalClinic.Services
                 DataT = termini.DataT,
                 Ora = termini.Ora,
                 Ceshtja = termini.Ceshtja,
-                DentistId = termini.StafiId,
                 PatientId = termini.PacientiId
 
             };
@@ -42,7 +41,6 @@ namespace WebApp_DentalClinic.Services
                 _termini.DataT = termini.DataT;
                 _termini.Ora = termini.Ora;
                 _termini.Ceshtja = termini.Ceshtja;
-                _termini.DentistId = termini.StafiId;
                 _termini.PatientId = termini.PacientiId;
 
                 _context.SaveChanges();

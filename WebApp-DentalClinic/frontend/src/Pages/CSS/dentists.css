@@ -1,30 +1,77 @@
-/* CSS for Dentists component */
-.background {
-    background-color: #f0f2f5; /* Adjust color as needed */
-    padding: 20px;
-}
-
-.table-container {
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-h1 {
-    margin-bottom: 16px;
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
     color: #333;
 }
 
-button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 4px;
-    cursor: pointer;
+.background {
+    background-color: #f4f4f4;
+    padding: 20px;
 }
 
-button:hover {
-    background-color: #0056b3;
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Table Container */
+.table-container {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+/* Button Styles */
+.ant-btn {
+    background: #007bff;
+    border: none;
+    color: #fff;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.ant-btn:hover {
+    background: #0056b3;
+}
+
+.ant-table-thead > tr > th {
+    background: #f8f9fa;
+    color: #495057;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.ant-table-tbody > tr > td {
+    border-bottom: 1px solid #dee2e6;
+}
+
+/* Spinner for loading */
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+}
+
+.loading-spinner::before {
+    content: '';
+    width: 30px;
+    height: 30px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }

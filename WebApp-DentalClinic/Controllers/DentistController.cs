@@ -19,11 +19,10 @@ namespace WebApp_DentalClinic.Controllers
             _dentistServices = dentistServices;
         }
 
-        [Authorize(Roles = "Dentist,Admin")]
         [HttpGet("/DentistAll")]
-        public async Task<ActionResult<List<Dentist>>> GetAllDentists()
+        public async Task<ActionResult<List<Dentist>>> GetAllDentist()
         {
-            var result = await _dentistServices.GetAllDentists();
+            var result = await _dentistServices.GetAllDentist();
             if (result == null)
             {
                 return NotFound("Dentist not found");
@@ -40,7 +39,6 @@ namespace WebApp_DentalClinic.Controllers
             return await _dentistServices.GetSingleDentist(id);
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Dentist>> GetSingleDentist(int id)
         {
@@ -54,13 +52,23 @@ namespace WebApp_DentalClinic.Controllers
 
         [Authorize(Roles = "Dentist,Admin")]
         [HttpPut("{id}")]
-        public async Task<ActionResult<List<Dentist>>> UpdateDentist(int id, DentistVM dentist)
+        public async Task<ActionResult<List<Dentist>>> UpdateDentist(int id, DentistVM mjeku)
         {
-            var result = await _dentistServices.UpdateDentist(id, dentist);
 
+            var result = await _dentistServices.UpdateDentist(id, new Dentist
+            {
+                EmriMbiemri = mjeku.EmriMbiemri,
+                Degree = mjeku.Degree,
+                Orari = mjeku.Orari,
+                Paga = mjeku.Paga,
+                Username = mjeku.Username,
+                Email = mjeku.Email,
+                DepartmentId = mjeku.DepartmentId,
+
+            });
             if (result == null)
             {
-                return NotFound("Dentist not found");
+                return NotFound("Mjeku not found");
             }
             return Ok(result);
         }
@@ -83,6 +91,29 @@ namespace WebApp_DentalClinic.Controllers
                 return BadRequest(response);
             }
             return Ok(response);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<List<Dentist>>> AddDentist(DentistVM mjeku)
+        {
+            var result = await _dentistServices.AddDentist(
+                new Dentist
+                {
+                    EmriMbiemri = mjeku.EmriMbiemri,
+                    Degree = mjeku.Degree,
+                    Orari = mjeku.Orari,
+                    Paga = mjeku.Paga,
+                    Username = mjeku.Username,
+                    Email = mjeku.Email,
+                    DepartmentId = mjeku.DepartmentId,
+
+                }
+                , mjeku.Password);
+            if (result == null)
+            {
+                return NotFound(result);
+            }
+            return Ok(result);
         }
     }
 }

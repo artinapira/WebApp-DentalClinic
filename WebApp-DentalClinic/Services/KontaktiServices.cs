@@ -1,4 +1,5 @@
-﻿using WebApp_DentalClinic.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using WebApp_DentalClinic.Models;
 using WebApp_DentalClinic.ViewModels;
 
 namespace WebApp_DentalClinic.Services
@@ -10,20 +11,38 @@ namespace WebApp_DentalClinic.Services
         {
             _context = context;
         }
-        public void AddKontakti(KontaktiVM kontakti)
+
+        public async Task<ServiceResponse<string>> AddKontakti(KontaktiVM kontakti)
         {
-            var _kontakti = new Kontakti()
+            var response = new ServiceResponse<string>();
+
+            try
             {
-                Mesazhi = kontakti.Mesazhi,
-            };
-            _context.Kontaktis.Add(_kontakti);
-            _context.SaveChanges();
+                var _kontakti = new Kontakti
+                {
+                    Mesazhi = kontakti.Mesazhi,
+                };
+
+                _context.Kontaktis.Add(_kontakti);
+                await _context.SaveChangesAsync();
+
+                response.Success = true;
+                response.Message = "Contact message added successfully.";
+                response.Data = "Message ID or any other relevant data"; // Optionally, you can return some data here.
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"An error occurred: {ex.Message}";
+            }
+
+            return response;
         }
+
 
         public List<Kontakti> GetAllKontakti()
         {
-            var allkontakti = _context.Kontaktis.ToList();
-            return allkontakti;
+            return _context.Kontaktis.ToList();
         }
 
         public Kontakti GetSingleKontakti(int kontaktiid) => _context.Kontaktis.FirstOrDefault(n => n.KontaktiId == kontaktiid);
@@ -34,7 +53,6 @@ namespace WebApp_DentalClinic.Services
             if (_kontakti != null)
             {
                 _kontakti.Mesazhi = kontakti.Mesazhi;
-
                 _context.SaveChanges();
             }
             return _kontakti;
@@ -49,6 +67,5 @@ namespace WebApp_DentalClinic.Services
                 _context.SaveChanges();
             }
         }
-
     }
 }

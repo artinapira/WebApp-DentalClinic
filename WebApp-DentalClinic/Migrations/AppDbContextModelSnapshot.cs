@@ -135,16 +135,27 @@ namespace WebApp_DentalClinic.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AdminId"));
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("EmriMbiemri")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<byte[]>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("AdminId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Admins");
                 });
@@ -191,6 +202,10 @@ namespace WebApp_DentalClinic.Migrations
                     b.Property<int>("DepartmentId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("EmriMbiemri")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -201,14 +216,21 @@ namespace WebApp_DentalClinic.Migrations
                     b.Property<decimal>("Paga")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<byte[]>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("DentistId");
 
                     b.HasIndex("DepartmentId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Dentists");
                 });
@@ -276,18 +298,6 @@ namespace WebApp_DentalClinic.Migrations
                         .HasColumnName("KontaktiID");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("KontaktiId"));
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("Emri")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("Mesazhi")
                         .IsRequired()
@@ -385,6 +395,10 @@ namespace WebApp_DentalClinic.Migrations
                     b.Property<DateOnly?>("DataLindjes")
                         .HasColumnType("date");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("EmriMbiemri")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -392,12 +406,19 @@ namespace WebApp_DentalClinic.Migrations
                     b.Property<string>("Gjinia")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<byte[]>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("PatientId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Patients");
                 });
@@ -510,7 +531,7 @@ namespace WebApp_DentalClinic.Migrations
                     b.Property<DateOnly?>("DataT")
                         .HasColumnType("date");
 
-                    b.Property<int>("DentistId")
+                    b.Property<int?>("DentistId")
                         .HasColumnType("int");
 
                     b.Property<TimeOnly?>("Ora")
@@ -526,38 +547,6 @@ namespace WebApp_DentalClinic.Migrations
                     b.HasIndex("PatientId");
 
                     b.ToTable("Terminets");
-                });
-
-            modelBuilder.Entity("WebApp_DentalClinic.Models.User", b =>
-                {
-                    b.Property<int>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte[]>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<byte[]>("PasswordSalt")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<int>("UserRole")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserId");
-
-                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("WebApp_DentalClinic.Models.Vlersimet", b =>
@@ -696,17 +685,6 @@ namespace WebApp_DentalClinic.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WebApp_DentalClinic.Models.Admin", b =>
-                {
-                    b.HasOne("WebApp_DentalClinic.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("WebApp_DentalClinic.Models.Ankesat", b =>
                 {
                     b.HasOne("WebApp_DentalClinic.Models.Dentist", "Dentist")
@@ -734,15 +712,7 @@ namespace WebApp_DentalClinic.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebApp_DentalClinic.Models.User", "User")
-                        .WithMany("Dentists")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Department");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("WebApp_DentalClinic.Models.MedicalRecord", b =>
@@ -754,17 +724,6 @@ namespace WebApp_DentalClinic.Migrations
                         .IsRequired();
 
                     b.Navigation("Patient");
-                });
-
-            modelBuilder.Entity("WebApp_DentalClinic.Models.Patient", b =>
-                {
-                    b.HasOne("WebApp_DentalClinic.Models.User", "User")
-                        .WithMany("Patients")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("WebApp_DentalClinic.Models.PatientNote", b =>
@@ -791,19 +750,15 @@ namespace WebApp_DentalClinic.Migrations
 
             modelBuilder.Entity("WebApp_DentalClinic.Models.Terminet", b =>
                 {
-                    b.HasOne("WebApp_DentalClinic.Models.Dentist", "Dentist")
+                    b.HasOne("WebApp_DentalClinic.Models.Dentist", null)
                         .WithMany("Terminets")
-                        .HasForeignKey("DentistId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DentistId");
 
                     b.HasOne("WebApp_DentalClinic.Models.Patient", "Patient")
                         .WithMany("Terminets")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Dentist");
 
                     b.Navigation("Patient");
                 });
@@ -854,13 +809,6 @@ namespace WebApp_DentalClinic.Migrations
                     b.Navigation("Terminets");
 
                     b.Navigation("Vlersimets");
-                });
-
-            modelBuilder.Entity("WebApp_DentalClinic.Models.User", b =>
-                {
-                    b.Navigation("Dentists");
-
-                    b.Navigation("Patients");
                 });
 #pragma warning restore 612, 618
         }

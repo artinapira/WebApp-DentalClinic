@@ -20,15 +20,24 @@ namespace WebApp_DentalClinic.Controllers
             _kontaktiServices = kontaktiServices;
         }
 
-        [Authorize(Roles = "Pacienti")]
+        [Authorize(Roles = "Patient")]
         [HttpPost("add-kontakti")]
-        public IActionResult AddKontakti([FromBody] KontaktiVM kontakti)
+        public async Task<IActionResult> AddKontakti([FromBody] KontaktiVM kontakti)
         {
-            _kontaktiServices.AddKontakti(kontakti);
-            return Ok();
+            var response = await _kontaktiServices.AddKontakti(kontakti);
+
+            if (response.Success ?? false)
+            {
+                return Ok(response);
+            }
+            else
+            {
+                return BadRequest(response);
+            }
         }
 
-        [Authorize(Roles = "Admin")]
+
+        [Authorize(Roles = "Patient")]
         [HttpGet("get-all-kontakti")]
         public IActionResult GetAllKontakti()
         {

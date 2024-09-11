@@ -1,4 +1,5 @@
-﻿using WebApp_DentalClinic.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using WebApp_DentalClinic.Models;
 using WebApp_DentalClinic.ViewModels;
 
 namespace WebApp_DentalClinic.Services

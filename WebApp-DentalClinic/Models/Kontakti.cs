@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApp_DentalClinic.Models
 {
@@ -13,12 +13,6 @@ namespace WebApp_DentalClinic.Models
         [Unicode(false)]
         public string Mesazhi { get; set; } = null!;
 
-        [StringLength(50)]
-        [Unicode(false)]
-        public string Emri { get; set; } = null!;
-
-        [StringLength(255)]
-        [Unicode(false)]
-        public string Email { get; set; } = null!;
+        // Remove Email and any other unwanted fields
     }
 }

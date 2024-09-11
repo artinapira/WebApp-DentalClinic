@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Filters;
 using System.Text.Json.Serialization;
 using WebApp_DentalClinic;
 using WebApp_DentalClinic.Services;
@@ -16,7 +15,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 // Add services
-builder.Services.AddTransient<UserServices>();
 builder.Services.AddTransient<PatientServices>();
 builder.Services.AddTransient<DentistServices>();
 builder.Services.AddTransient<AdminServices>();
@@ -35,10 +33,17 @@ builder.Services.AddTransient<TerapiaServices>();
 builder.Services.AddTransient<VlersimetServices>();
 builder.Services.AddTransient<KontaktiServices>();
 
-builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
+builder.Services.AddCors(options =>
 {
-    build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
-}));
+    options.AddPolicy("AllowAllOrigin",
+        builder =>
+        {
+            builder.WithOrigins("https://localhost:3000") // Your frontend URL
+                   .AllowAnyHeader()
+                   .AllowAnyMethod()
+                   .AllowCredentials();
+        });
+});
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -47,7 +52,8 @@ builder.Services.AddControllers()
     });
 
 // Add JWT authentication
-string tokenValue = builder.Configuration.GetSection("AppSettings:Token").Value!;
+var tokenValue = builder.Configuration["AppSettings:Token"];
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
@@ -56,7 +62,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(tokenValue)),
         ValidateIssuer = false,
         ValidateAudience = false,
-        ValidateLifetime = true
     };
 });
 
@@ -98,17 +103,13 @@ if (app.Environment.IsDevelopment())
 }
 
 // Add other middleware and routing
-
 app.UseRouting();
-app.UseCors();
+
+app.UseCors("AllowAllOrigin");
+
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 
 app.Run();
-
-static void NewMethod()
-{
-    var secretToken = Guid.NewGuid().ToString();
-}

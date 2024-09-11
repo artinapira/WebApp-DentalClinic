@@ -1,0 +1,66 @@
+.account-wraper2 {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+   /* background-color: #f5f5fc;*/
+    background-color: #F0F8FF;
+
+  }
+  
+  .account-wraper2 .logo {
+    margin-bottom: 30px;
+  }
+  .fform3-group3 h6{
+    font-size: 20px;
+    display: block;
+
+
+  } 
+  .form3{
+    display: block;
+  }
+
+  input{
+    background-color: aliceblue;
+    border: 1px solid aliceblue;
+    border-radius: 7px;
+    width: 90%;
+    height: 60px;
+    height: 50px;
+    
+  }
+ 
+  a,
+  a.active,
+  a:focus,
+  a:hover {
+    text-decoration: none;
+    outline: none;
+    color: #565acf;
+    font-weight: 500;
+  }
+  
+  .mt-40 {
+    margin-top: 40px;
+  }
+  
+  .mt-0 {
+    margin-top: 0px;
+  }
+  
+  .text-center p {
+    color: #444;
+    font-weight: 500;
+  }
+  h4{
+    color: black;
+  }
+  
+button{
+  background-color: orange;
+  width: 160px;
+  border: 1px solid orange;
+  border-radius: 9px !important;
+  margin-top: 10px;
+  transition: .2s ease;
+}
