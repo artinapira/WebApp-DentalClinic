@@ -27,6 +27,8 @@ import Vlersimet from './Pages/Dashboard/Main-Dashboard/AllPages/GlobalFiles/Vle
 import MedicalRecord from './Pages/Dashboard/Main-Dashboard/AllPages/GlobalFiles/MedicalRecord';
 import PatientNote from './Pages/Dashboard/Main-Dashboard/AllPages/GlobalFiles/PatientNote';
 import Prescription from './Pages/Dashboard/Main-Dashboard/AllPages/GlobalFiles/Prescription';
+import Marketing from './Pages/Marketing';
+import Knowledge from './Pages/Knowledge';
 
 
 
@@ -60,6 +62,10 @@ function App() {
                 <Route path="/medicalRecord" element={<MedicalRecord/>}/>
                 <Route path="/patientNote" element={<PatientNote/>}/>
                 <Route path="/prescription" element={<Prescription/>}/>
+                <Route path="/Marketing" element={<Marketing/>}/>
+                <Route path="/Knowledge" element={<Knowledge/>}/>
+
+
 
               
 
