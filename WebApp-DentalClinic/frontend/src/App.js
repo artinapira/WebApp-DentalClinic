@@ -10,6 +10,7 @@ import AddAnkesa from './Pages/AddAnkesa';
 import AddVlersimi from './Pages/AddVlersimi';
 import DentistProfile from './Pages/DentistProfile';
 import PatientProfile from './Pages/PatientProfile';
+import Admin from './Pages/Dashboard/Main-Dashboard/AllPages/GlobalFiles/Admin';
 import {
   BrowserRouter as Router,
   Routes,
@@ -17,6 +18,16 @@ import {
 } from "react-router-dom";
 import ContactUs from './Pages/ContactUs';
 import DLogin from './Pages/DLogin';
+import FrontPage from './Pages/Dashboard/Main-Dashboard/AllPages/GlobalFiles/FrontPage';
+import Kontaktet from './Pages/Dashboard/Main-Dashboard/AllPages/GetKontakti';
+import Dentist from './Pages/Dashboard/Main-Dashboard/AllPages/GlobalFiles/Dentist';
+import Terminet from './Pages/Dashboard/Main-Dashboard/AllPages/GlobalFiles/Terminet';
+import Ankesat from './Pages/Dashboard/Main-Dashboard/AllPages/GlobalFiles/Ankesat';
+import Vlersimet from './Pages/Dashboard/Main-Dashboard/AllPages/GlobalFiles/Vlersimet';
+import MedicalRecord from './Pages/Dashboard/Main-Dashboard/AllPages/GlobalFiles/MedicalRecord';
+import PatientNote from './Pages/Dashboard/Main-Dashboard/AllPages/GlobalFiles/PatientNote';
+import Prescription from './Pages/Dashboard/Main-Dashboard/AllPages/GlobalFiles/Prescription';
+
 
 
 
@@ -39,6 +50,16 @@ function App() {
                 <Route path="/AddVlersimi" element={<AddVlersimi/>}/>
                 <Route path="/DentistProfile" element={<DentistProfile/>}/>
                 <Route path="/PatientProfile" element={<PatientProfile/>}/>
+                <Route path="/kontaktet" element={<Kontaktet/>}/>
+                <Route path="/admin" element={<Admin/>}/>
+                <Route path="/dentist" element={<Dentist/>}/>
+                <Route path="/dashboard" element={<FrontPage/>}/>
+                <Route path="/terminet" element={<Terminet/>}/>
+                <Route path="/ankesat" element={<Ankesat/>}/>
+                <Route path="/vlersimet" element={<Vlersimet/>}/>
+                <Route path="/medicalRecord" element={<MedicalRecord/>}/>
+                <Route path="/patientNote" element={<PatientNote/>}/>
+                <Route path="/prescription" element={<Prescription/>}/>
 
               
 
