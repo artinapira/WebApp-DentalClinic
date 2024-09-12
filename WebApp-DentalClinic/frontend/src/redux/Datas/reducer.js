@@ -20,6 +20,7 @@ const initialState = {
     terapias:[],
     terminets:[],
     vlersimets:[],
+    kontaktet:[],
     message: ""
 
 };
@@ -304,6 +305,19 @@ export default function dataReducer(state = initialState, { type, payload }) {
                 dentists:payload
             }
 
+
+        case types.DELETE_KONTAKTI_SUCCESS:
+            return {
+                ...state,
+                loading:false,
+                kontaktet:payload
+            }
+        case types.GET_KONTAKTI_SUCCESS:
+            return {
+                ...state,
+                loading:false,
+                kontaktet:payload
+            }
         default:
             return state;
     }
