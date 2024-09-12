@@ -4,8 +4,8 @@
     {
         public string Sherbimi { get; set; }
         public string Sjellja { get; set; }
-        public int StafiId { get; set; }
+        public int DentistId { get; set; }
 
-        public int PacientiId { get; set; }
+        public int PatientId { get; set; }
     }
 }

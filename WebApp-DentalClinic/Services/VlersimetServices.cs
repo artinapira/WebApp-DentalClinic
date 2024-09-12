@@ -16,8 +16,10 @@ namespace WebApp_DentalClinic.Services
             var _vlersimi = new Vlersimet()
             {
                 Sherbimi = vlersimi.Sherbimi,
-                Sjellja = vlersimi.Sjellja
-               
+                Sjellja = vlersimi.Sjellja,
+                DentistId = vlersimi.DentistId,
+                PatientId = vlersimi.PatientId,
+
 
             };
             _context.Vlersimett.Add(_vlersimi);
@@ -39,8 +41,8 @@ namespace WebApp_DentalClinic.Services
             {
                 _vlersimi.Sherbimi = vlersimi.Sherbimi;
                 _vlersimi.Sjellja = vlersimi.Sjellja;
-                _vlersimi.PatientId = vlersimi.PacientiId;
-                _vlersimi.DentistId = vlersimi.StafiId;
+                _vlersimi.PatientId = vlersimi.PatientId;
+                _vlersimi.DentistId = vlersimi.DentistId;
 
                 _context.SaveChanges();
             }

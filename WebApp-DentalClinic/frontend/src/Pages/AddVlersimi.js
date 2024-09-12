@@ -8,7 +8,8 @@ const RatingModal = ({ dentist, visible, onClose }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { data: { user1 } } = useSelector((state) => state.auth);
-    const [rating, setRating] = useState(0);
+    const [service, setService] = useState('');
+    const [behaviour, setBehaviour] = useState('');
 
     const handleSubmit = async () => {
         if (!user1?.patientId) {
@@ -20,7 +21,8 @@ const RatingModal = ({ dentist, visible, onClose }) => {
         }
 
         const ratingData = {
-            vlersimi: rating,
+            sherbimi: service,
+            sjellja: behaviour,
             dentistId: dentist.dentistId,
             patientId: user1.patientId
         };
@@ -56,10 +58,17 @@ const RatingModal = ({ dentist, visible, onClose }) => {
                 </Button>
             ]}
         >
-            <Rate
-                value={rating}
-                onChange={(value) => setRating(value)}
-                style={{ fontSize: '24px' }}
+            <Input.TextArea
+                value={service}
+                onChange={(e) => setService(e.target.value)}
+                rows={4}
+                placeholder="Enter your opinion on service here"
+            />
+            <Input.TextArea
+                value={behaviour}
+                onChange={(e) => setBehaviour(e.target.value)}
+                rows={4}
+                placeholder="Enter your opinion on behaviour here"
             />
         </Modal>
     );
