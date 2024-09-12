@@ -10,7 +10,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Retrieve connection string from appsettings.json
 string connectionString = builder.Configuration.GetConnectionString("DentalClinicDatabase");
-
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
 
