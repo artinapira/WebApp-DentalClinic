@@ -36,7 +36,7 @@ function Navbars() {
                             </Link>
                         )}
 
-                        {admin && (
+                        {!user1?.patientId && (
                             <Link to="/dashboard" className="nav-link">
                                 <span>Dashboard</span>
                             </Link>

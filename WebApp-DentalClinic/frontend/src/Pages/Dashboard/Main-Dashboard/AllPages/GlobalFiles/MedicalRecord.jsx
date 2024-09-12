@@ -34,31 +34,32 @@ const MedicalRecord = () => {
     ];
 
     const navigate = useNavigate();
-    const { medicalrecords } = useSelector((store) => store.data);
+    const medicalrecords = useSelector((store) => store.data.medicalrecords["$values"] || []);
     useEffect(() => {
       if (medicalrecords == []){
         window.location.reload()
       }
     },[])
     const {message} = useSelector((store)=> store.data);
-    console.log(medicalrecords)
+    console.log(medicalrecords);
 
     const dispatch = useDispatch();
 
-    const {
-      data: { user1 },
-    } = useSelector((state) => state.auth);
-    const user = user1;
- 
+    const {dentist} = useSelector((state) => state.auth.data);
+    const {admin} = useSelector((state) => state.auth.data);
+    console.log('user: ',dentist);
+    console.log('user: ',admin);
+
 
   useEffect(() => {
     dispatch(GetAllMedicalRecord(token1));
   }, []);
+  console.log('medical records: ',medicalrecords);
 
     return (
         <>
 
-         {medicalrecords != null && medicalrecords.length && (user?.dentistId) ? (
+         {medicalrecords && medicalrecords.length > 0  ? (
       <div className="patientDetails1">
         <h1>Medical Record Details</h1>
         <div className="patientBox1">

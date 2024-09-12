@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Modal, Button, Rate, notification } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { VlersimetAdd } from '../redux/Datas/action'; // Import your action creator
 import { useNavigate } from 'react-router-dom';
+import { Modal, Button, Rate, notification, Input } from 'antd';
+
 
 const RatingModal = ({ dentist, visible, onClose }) => {
     const dispatch = useDispatch();

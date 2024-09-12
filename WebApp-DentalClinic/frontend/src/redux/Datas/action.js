@@ -135,9 +135,10 @@ export const GetAllDentists = (token) => async (dispatch) => {
         }}
       );
       
+      const dentists = res.data.$values || [];
       dispatch({
-        type: types.GET_DENTIST_SUCCESS,
-        payload: res.data,
+          type: types.GET_DENTIST_SUCCESS,
+          payload: dentists, // Update to use the correct structure
       });
     } catch (error) {
         

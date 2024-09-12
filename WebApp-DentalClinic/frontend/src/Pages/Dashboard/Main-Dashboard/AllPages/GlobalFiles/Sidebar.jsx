@@ -21,17 +21,15 @@ const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
 
-  const {
-    data: { user1 },
-  } = useSelector((state) => state.auth);
-
-  const user = user1;
   function toggle() {
     setIsOpen(!isOpen);
   }
 
-  const { token1 } = useSelector((store) => store.auth.data);
+  const { token1, dentist, admin } = useSelector((store) => store.auth.data);
 
+  console.log('Token from sidebar:', token1);
+console.log('Data of dentist sidebar',dentist);
+console.log('Data of admin sidebar',admin);
 
 
   useEffect(() => {
@@ -75,7 +73,7 @@ const Sidebar = () => {
               </div>
             </Link>
 
-            {user?.adminId ? (
+            {admin?.adminId ? (
               <Link
                 className="link1"
                 activeclassname="active"
@@ -94,7 +92,7 @@ const Sidebar = () => {
             ) : null}
             
 
-            {user?.adminId ? (
+            {admin?.adminId ? (
               <Link
                 className="link1"
                 activeclassname="active"
@@ -111,7 +109,7 @@ const Sidebar = () => {
                 </div>
               </Link>
             ) : null}
-            {user?.adminId ? (
+            {admin?.adminId ? (
               <Link className="link1" activeclassname="active" to={"/Add_Dentist"}>
                 <div className="icon1">
                   <AiOutlineUserAdd className="mainIcon1" />
@@ -125,7 +123,7 @@ const Sidebar = () => {
               </Link>
             ) : null}
 
-            {user?.adminId ? (
+            {admin?.adminId ? (
               <Link className="link1" activeclassname="active" to={"/Add_Admin"}>
                 <div className="icon1">
                   <RiAdminLine
@@ -143,7 +141,7 @@ const Sidebar = () => {
             ) : null}
 
 
-            {user?.dentistId ? (
+            {dentist?.dentistId ? (
               <Link
                 className="link1"
                 activeclassname="active"
@@ -161,7 +159,7 @@ const Sidebar = () => {
               </Link>
             ) : null}
            
-            {user?.dentistId ? (
+            {dentist?.dentistId ? (
               <Link className="link1" activeclassname="active" to={"/reports"}>
                 <div className="icon" style={{marginLeft:'-1%'}}>
                   <TbReportMedical className="mainIcon1" />
@@ -174,7 +172,7 @@ const Sidebar = () => {
                 </div>
               </Link>
             ) : null}
-            {user?.dentistId ? (
+            {dentist?.dentistId ? (
               <Link
                 className="link1"
                 activeclassname="active"

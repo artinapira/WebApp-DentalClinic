@@ -21,11 +21,16 @@ import Admin from "./Admin";
 import "./CommonCSS.css";
 const FrontPage = () => {
 
-  const {
-    data: { user1 },
-  } = useSelector((state) => state.auth);
-  const user = user1;
-  const {token1} = useSelector((store) => store.auth.data);
+  const dentist = useSelector((state) => state.auth.data.dentist);
+  const admin = useSelector((state) => state.auth.data.admin);
+  const token1 = useSelector((store) => store.auth.data.token1);
+  console.log('dentist: ',dentist);
+  console.log('admin', admin);
+  const dentistsId = dentist?.dentistId;
+  const adminsId = admin?.adminId;
+  console.log('dentistID: ',dentistsId);
+  console.log('adminID', adminsId);
+
 
     const columns = [
       { title: "Full Name", dataIndex: "emriMbiemri", key: "emriMbiemri" },
@@ -40,7 +45,7 @@ const FrontPage = () => {
             return navigate(`/editPatient/${record.patientId}`);
           }}/>
           <DeleteOutlined className="edit" style={{color:"red",marginLeft:10}} onClick={()=>
-            dispatch(DeletePatient(record.pacientiId,token1))
+            dispatch(DeletePatient(record.patientId,token1))
           }/>
           </>
         )
@@ -50,6 +55,7 @@ const FrontPage = () => {
     const navigate = useNavigate();
     const { patients } = useSelector((store) => store.data);
     const {message} = useSelector((store)=> store.data);
+    console.log('Patients: ',patients);
 
 
     const dispatch = useDispatch();
@@ -63,7 +69,7 @@ const FrontPage = () => {
         <div className="container1">
           <Sidebar />
           <div className="AfterSideBar1">
-        {patients != null  && patients.length &&  (user?.dentistId || user?.adminId) ? (<div className="patientDetails1">
+        {patients  && patients.length > 0 ? (<div className="patientDetails1">
             <h1>Patient Details</h1>
             <div className="patientBox1">
               <Table columns={columns} dataSource={patients} />

@@ -301,7 +301,7 @@ export const GetDentistProfile = (token) => async (dispatch) => {
     
     dispatch({
       type: types.GET_DENTIST_PROFILE_SUCCESS,
-      payload: {data:res.data},
+      payload: res.data,
     });
     return res.data;
   }
@@ -328,7 +328,7 @@ export const GetAdminProfile = (token) => async (dispatch) => {
     
     dispatch({
       type: types.GET_ADMIN_PROFILE_SUCCESS,
-      payload: {data:res.data},
+      payload: res.data,
     });
     return res.data;
   }
