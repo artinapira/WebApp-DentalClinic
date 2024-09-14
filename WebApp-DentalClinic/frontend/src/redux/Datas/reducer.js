@@ -4,7 +4,7 @@ const initialState = {
     loading: false,
     error: false,
     dentists: [],
-    admins:[],
+    admins: [],
     patients: [],
     ankesats: [],
     dashboard: [],
@@ -13,14 +13,14 @@ const initialState = {
     knowledges: [], 
     marketings: [],
     medicalrecords: [],
-    partners:[],
+    partners: [],
     patientnotes: [],
     prescriptions: [],
-    sherbimeshteses:[],
-    terapias:[],
-    terminets:[],
-    vlersimets:[],
-    kontaktet:[],
+    sherbimeshteses: [],
+    terapias: [],
+    terminets: [],
+    vlersimets: [],
+    kontaktet: [],
     message: ""
 
 };
@@ -317,6 +317,12 @@ export default function dataReducer(state = initialState, { type, payload }) {
                 ...state,
                 loading:false,
                 kontaktet:payload
+            }
+        case types.DELETE_PATIENT_SUCCESS:
+            return{
+                ...state,
+                loading:false,
+                patients:payload
             }
         default:
             return state;

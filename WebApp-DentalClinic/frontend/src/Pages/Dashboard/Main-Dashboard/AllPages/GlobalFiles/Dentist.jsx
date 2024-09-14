@@ -23,7 +23,7 @@ const Dentist = () => {
           <>
             <EditFilled className="edit" onClick={() => {
              
-              return navigate(`/editDentist/${record.dentistId}`);
+              return navigate(`/EditDentist/${record.dentistId}`);
             }} />
             <DeleteOutlined className="edit" style={{ color: "red", marginLeft: 10 }} onClick={() =>
 

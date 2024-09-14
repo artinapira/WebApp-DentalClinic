@@ -14,7 +14,8 @@ import Img9 from '../Assets/image9.png';
 
 const Marketing = () => {
   return (
-    <><section className="marketing-section">
+    <><Navbar />
+    <section className="marketing-section">
       <div className="marketing-container">
         <h3>Marketing</h3>
       </div>
@@ -77,7 +78,7 @@ const Marketing = () => {
 
           </div>
         </div>
-        
+        <Footer></Footer>
         </>
 
         );

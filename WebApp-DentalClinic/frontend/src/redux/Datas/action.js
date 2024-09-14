@@ -28,14 +28,14 @@ export const GetAllKontaktet = (token) => async (dispatch) => {
     try {
       dispatch({type:types.GET_KONTAKTI_REQUEST});
       const res = await axios.get(
-        `https://localhost:7157/api/get-all-kontakti`,{
+        `https://localhost:7157/api/Kontakti/get-all-kontakti`,{
           headers: {
             Authorization: "Bearer " + token
         }}
       );
       dispatch({
         type: types.GET_KONTAKTI_SUCCESS,
-        payload:res.data.data,
+        payload:res.data,
       });
       
   
@@ -53,14 +53,14 @@ export const DeleteKontakti = (id,token) => async (dispatch) => {
     try {
       dispatch({type:types.DELETE_KONTAKTI_REQUEST});
       const res = await axios.delete (
-        `https://localhost:7157/api/delete-kontakti-by-id/${id}`,{
+        `https://localhost:7157/api/Kontakti/delete-kontakti-by-id/${id}`,{
           headers: {
             Authorization: "Bearer " + token
         }}
         );
         dispatch({
           type: types.DELETE_KONTAKTI_SUCCESS,
-          payload:res.data.data,
+          payload:res.data,
         });
         
   
@@ -104,7 +104,7 @@ export const DeletePatient = (id,token) => async (dispatch) => {
     try {
       dispatch({type:types.DELETE_PATIENT_REQUEST});
       const res = await axios.delete(
-        `https://localhost:7157/api/Patient/${id}`, {
+        `https://localhost:7157/api/Patient/PatientDelete/${id}`, {
           headers: {
             Authorization: "Bearer " + token
         }}
@@ -135,7 +135,9 @@ export const GetAllDentists = (token) => async (dispatch) => {
         }}
       );
       
-      const dentists = res.data.$values || [];
+      console.log("API Response Data:", res.data);
+      const dentists = res.data.data?.$values || [];
+      console.log('API dentist', dentists);
       dispatch({
           type: types.GET_DENTIST_SUCCESS,
           payload: dentists, // Update to use the correct structure

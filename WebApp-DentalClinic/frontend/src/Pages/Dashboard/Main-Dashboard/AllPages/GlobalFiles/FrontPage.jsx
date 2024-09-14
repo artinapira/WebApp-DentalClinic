@@ -2,12 +2,11 @@ import { Table } from "antd";
 import React from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { GetAllPatients } from "../../../../../redux/Datas/action";
+import { GetAllPatients, DeletePatient } from "../../../../../redux/Datas/action";
 import { Link } from "react-router-dom";
 import { FiLogOut } from "react-icons/fi";
 import {EditFilled,DeleteOutlined} from '@ant-design/icons'
 import { useNavigate } from "react-router-dom";
-import { DeletePatient } from "../../../../../redux/Datas/action";
 import Sidebar from "./Sidebar";
 import MedicalRecord from "./MedicalRecord";
 import PatientNote from "./PatientNote";
@@ -42,10 +41,12 @@ const FrontPage = () => {
           <>
           <EditFilled className="edit" onClick={()=>{
             ;
-            return navigate(`/editPatient/${record.patientId}`);
+            return navigate(`/EditPatient/${record.patientId}`);
           }}/>
           <DeleteOutlined className="edit" style={{color:"red",marginLeft:10}} onClick={()=>
-            dispatch(DeletePatient(record.patientId,token1))
+            dispatch(DeletePatient(record.patientId, token1)).then(() => {
+              setRefresh(!refresh);  // Reload the page after deletion
+            })
           }/>
           </>
         )
@@ -61,9 +62,10 @@ const FrontPage = () => {
     const dispatch = useDispatch();
  
 
+    const [refresh, setRefresh] = React.useState(false);
   useEffect(() => {
     dispatch(GetAllPatients(token1));
-  }, []);
+  }, [refresh]);
 
     return (
         <div className="container1">

@@ -20,10 +20,12 @@ const PatientNote = () => {
           <>
           <EditFilled className="edit" onClick={()=>{
             ;
-            return navigate(`/editPatientNote/${record.patientNoteId}`);
+            return navigate(`/EditPatientNote/${record.patientNoteId}`);
           }}/>
           <DeleteOutlined className="edit" style={{color:"red",marginLeft:10}} onClick={()=>
-            dispatch(DeletePatientNote(record.patientNoteId,token1))
+            dispatch(DeletePatientNote(record.patientNoteId,token1)).then(() => {
+              setRefresh(!refresh);
+            })
           }/>
           </>
         )
@@ -31,31 +33,27 @@ const PatientNote = () => {
     ];
 
     const navigate = useNavigate();
-    const { patientnotes } = useSelector((store) => store.data);
-    useEffect(() => {
-      if (patientnotes == []){
-        window.location.reload()
-      }
-    },[])
+    const  patientnotes  = useSelector((store) => store.data?.patientnotes?.["$values"] || []);
     const {message} = useSelector((store)=> store.data);
     console.log(patientnotes)
 
     const dispatch = useDispatch();
 
     const {
-      data: { user1 },
+      data: { dentist }
     } = useSelector((state) => state.auth);
-    const user = user1;
+    const user = dentist;
  
+    const [refresh, setRefresh] = React.useState(false);
 
   useEffect(() => {
     dispatch(GetAllPatientNote(token1));
-  }, []);
+  }, [refresh]);
 
     return (
         <>
 
-         {patientnotes != null && patientnotes.length && (user?.dentistId) ? (
+         {patientnotes && patientnotes.length > 0  ? (
       <div className="patientDetails1">
         <h1>Patient Note Details</h1>
         <div className="patientBox1">

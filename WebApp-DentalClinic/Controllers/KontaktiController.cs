@@ -37,7 +37,6 @@ namespace WebApp_DentalClinic.Controllers
         }
 
 
-        [Authorize(Roles = "Patient")]
         [HttpGet("get-all-kontakti")]
         public IActionResult GetAllKontakti()
         {
@@ -47,23 +46,24 @@ namespace WebApp_DentalClinic.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpGet("get-kontakti-by-id/{id}")]
-        public IActionResult GetSingleKontakti(int kontaktiid)
+        public IActionResult GetSingleKontakti(int id)
         {
-            var kontakti = _kontaktiServices.GetSingleKontakti(kontaktiid);
+            var kontakti = _kontaktiServices.GetSingleKontakti(id);
             return Ok(kontakti);
         }
 
         [HttpPut("update-kontakti-by-id/{id}")]
-        public IActionResult UpdateKontaktiById(int kontaktiid, [FromBody] KontaktiVM kontakti)
+        public IActionResult UpdateKontaktiById(int id, [FromBody] KontaktiVM kontakti)
         {
-            var updatedkontakti = _kontaktiServices.UpdateKontaktiById(kontaktiid, kontakti);
+            var updatedkontakti = _kontaktiServices.UpdateKontaktiById(id, kontakti);
             return Ok(updatedkontakti);
         }
+
         [Authorize(Roles = "Admin")]
         [HttpDelete("delete-kontakti-by-id/{id}")]
-        public IActionResult DeleteKontakti(int kontaktiid)
+        public IActionResult DeleteKontakti(int id)
         {
-            _kontaktiServices.DeleteKontakti(kontaktiid);
+            _kontaktiServices.DeleteKontakti(id);
             return Ok();
         }
     }

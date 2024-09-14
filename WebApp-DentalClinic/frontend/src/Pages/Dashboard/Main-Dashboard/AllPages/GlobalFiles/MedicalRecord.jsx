@@ -11,7 +11,7 @@ import { DeleteMedicalRecord } from "../../../../../redux/Datas/action";
 const MedicalRecord = () => {
 
     
-  const {token1} = useSelector((store) => store.auth.data);
+  
     const columns = [
       { title: "Description", dataIndex: "pershkrimi", key: "pershkrimi" },
       { title: "Symptoms", dataIndex: "simptomat", key: "simptomat" },
@@ -23,10 +23,12 @@ const MedicalRecord = () => {
           <>
           <EditFilled className="edit" onClick={()=>{
             ;
-            return navigate(`/editMedicalRecord/${record.medicalRecordId}`);
+            return navigate(`/EditMedicalRecord/${record.medicalRecordId}`);
           }}/>
           <DeleteOutlined className="edit" style={{color:"red",marginLeft:10}} onClick={()=>
-            dispatch(DeleteMedicalRecord(record.medicalRecordId,token1))
+            dispatch(DeleteMedicalRecord(record.medicalRecordId,token1)).then(() => {
+              setRefresh(!refresh);
+            })
           }/>
           </>
         )
@@ -34,12 +36,10 @@ const MedicalRecord = () => {
     ];
 
     const navigate = useNavigate();
-    const medicalrecords = useSelector((store) => store.data.medicalrecords["$values"] || []);
-    useEffect(() => {
-      if (medicalrecords == []){
-        window.location.reload()
-      }
-    },[])
+    const medicalrecords = useSelector((store) => store.data?.medicalrecords?.["$values"] || []);
+
+    const {token1} = useSelector((store) => store.auth.data);
+
     const {message} = useSelector((store)=> store.data);
     console.log(medicalrecords);
 
@@ -50,10 +50,11 @@ const MedicalRecord = () => {
     console.log('user: ',dentist);
     console.log('user: ',admin);
 
+    const [refresh, setRefresh] = React.useState(false);
 
   useEffect(() => {
     dispatch(GetAllMedicalRecord(token1));
-  }, []);
+  }, [refresh]);
   console.log('medical records: ',medicalrecords);
 
     return (

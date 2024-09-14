@@ -11,7 +11,9 @@ import { FaUser } from "react-icons/fa";
 
 function Navbars() {
     const dispatch = useDispatch();
-    const {user1, dentist, admin} = useSelector(state => state.auth.data);
+    const user1 = useSelector(state => state.auth.data.user1);
+    const dentist = useSelector(state => state.auth.data.dentist);
+    const admin = useSelector(state => state.auth.data.admin);
 
     console.log("Navbar User data:", user1);
 

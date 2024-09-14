@@ -226,6 +226,38 @@ export default function authReducer(state = initialState, { type, payload }) {
                         patient: payload
                     }
                 }
+            case types.EDIT_TERMINET_SUCCESS:
+                return {
+                    ...state,
+                    data: {
+                        ...state.data,
+                        terminet: payload
+                    }
+                }
+            case types.EDIT_MEDICALRECORD_SUCCESS:
+                return {
+                    ...state,
+                    data: {
+                        ...state.data,
+                        medicalrecord: payload
+                    }
+                }
+            case types.EDIT_PATIENTNOTE_SUCCESS:
+                return {
+                    ...state,
+                    data: {
+                        ...state.data,
+                        patientnote: payload
+                    }
+                }
+            case types.EDIT_PRESCRIPTION_SUCCESS:
+                return {
+                    ...state,
+                    data: {
+                        ...state.data,
+                        prescription: payload
+                    }
+                }
         default:
             return state;
     }

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { AiOutlineUserAdd } from "react-icons/ai";
-import { GiNurseFemale } from "react-icons/gi";
+import { GiNurseFemale, GiTooth } from "react-icons/gi";
 import { SlUserFollow } from "react-icons/sl";
 import { BsBookmarkPlus, BsFillBookmarkCheckFill } from "react-icons/bs";
 import { BiDetail } from "react-icons/bi";
 import { CgProfile } from "react-icons/cg";
-import { FaHospitalUser,FaUserDoctor } from "react-icons/fa";
+import { FaHospitalUser,FaUserMd } from "react-icons/fa";
 import { TbReportMedical } from "react-icons/tb";
 import { MdBedroomChild } from "react-icons/md";
 import { Link } from "react-router-dom";
@@ -26,6 +26,9 @@ const Sidebar = () => {
   }
 
   const { token1, dentist, admin } = useSelector((store) => store.auth.data);
+  
+  const user = admin;
+  const user1 = dentist;
 
   console.log('Token from sidebar:', token1);
 console.log('Data of dentist sidebar',dentist);
@@ -73,14 +76,14 @@ console.log('Data of admin sidebar',admin);
               </div>
             </Link>
 
-            {admin?.adminId ? (
+            {user?.adminId ? (
               <Link
                 className="link1"
                 activeclassname="active"
                 to={"/Add_Patient"}
               >
                 <div className="icon1">
-                  <FaHospitalUser className="mainIcon1" />
+                  <FaUserMd className="mainIcon1" />
                 </div>
                 <div
                   style={{ display: isOpen ? "block" : "none" }}
@@ -92,11 +95,11 @@ console.log('Data of admin sidebar',admin);
             ) : null}
             
 
-            {admin?.adminId ? (
+            {user?.adminId ? (
               <Link
                 className="link1"
                 activeclassname="active"
-                to={"/Add_Terminet"}
+                to={"/Add_Termini"}
               >
                 <div className="icon1">
                   <BsBookmarkPlus className="mainIcon1" />
@@ -109,7 +112,7 @@ console.log('Data of admin sidebar',admin);
                 </div>
               </Link>
             ) : null}
-            {admin?.adminId ? (
+            {user?.adminId ? (
               <Link className="link1" activeclassname="active" to={"/Add_Dentist"}>
                 <div className="icon1">
                   <AiOutlineUserAdd className="mainIcon1" />
@@ -123,7 +126,7 @@ console.log('Data of admin sidebar',admin);
               </Link>
             ) : null}
 
-            {admin?.adminId ? (
+            {user?.adminId ? (
               <Link className="link1" activeclassname="active" to={"/Add_Admin"}>
                 <div className="icon1">
                   <RiAdminLine
@@ -141,7 +144,7 @@ console.log('Data of admin sidebar',admin);
             ) : null}
 
 
-            {dentist?.dentistId ? (
+            {!user?.adminId ? (
               <Link
                 className="link1"
                 activeclassname="active"
@@ -159,20 +162,7 @@ console.log('Data of admin sidebar',admin);
               </Link>
             ) : null}
            
-            {dentist?.dentistId ? (
-              <Link className="link1" activeclassname="active" to={"/reports"}>
-                <div className="icon" style={{marginLeft:'-1%'}}>
-                  <TbReportMedical className="mainIcon1" />
-                </div>
-                <div
-                  style={{ display: isOpen ? "block" : "none" }}
-                  className="link_text1"
-                >
-                  Reports
-                </div>
-              </Link>
-            ) : null}
-            {dentist?.dentistId ? (
+            {!user?.adminId ? (
               <Link
                 className="link1"
                 activeclassname="active"

@@ -45,7 +45,7 @@ const Home = () => {
                     console.error('Admin Profile API call error:', err);
                 });
         }
-}, [dispatch, token1]); // Added `token1` to the dependency array
+}, [dispatch, token1]); 
 
 console.log('Token from home:', token1);
 console.log('Data from home page:', user1);

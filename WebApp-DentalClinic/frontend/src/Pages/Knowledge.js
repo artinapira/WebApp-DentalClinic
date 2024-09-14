@@ -8,6 +8,8 @@ import Footer from '../Components/Footer/Footer';
 
 const Knowledge = () => {
     return (
+      <>
+      <Navbar />
     <section className="knowledge-section">
         <img src={knowledgeImg} alt="img" className="img" />
     <div className="knowledge-container">
@@ -43,6 +45,8 @@ const Knowledge = () => {
         </div>
         </div>
     </section>
+    <Footer></Footer>
+    </>
     );
     }
 

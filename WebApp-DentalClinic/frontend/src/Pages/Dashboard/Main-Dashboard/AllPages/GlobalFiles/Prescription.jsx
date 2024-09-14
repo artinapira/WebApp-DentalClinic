@@ -21,10 +21,12 @@ const PatientNote = () => {
           <>
           <EditFilled className="edit" onClick={()=>{
             ;
-            return navigate(`/editPatientNote/${record.prescriptionId}`);
+            return navigate(`/EditPrescription/${record.prescriptionId}`);
           }}/>
           <DeleteOutlined className="edit" style={{color:"red",marginLeft:10}} onClick={()=>
-            dispatch(DeletePrescription(record.prescriptionId,token1))
+            dispatch(DeletePrescription(record.prescriptionId,token1)).then(() => {
+              setRefresh(!refresh);
+            })
           }/>
           </>
         )
@@ -32,33 +34,25 @@ const PatientNote = () => {
     ];
 
     const navigate = useNavigate();
-    const { prescriptions } = useSelector((store) => store.data);
-    useEffect(() => {
-      if (prescriptions == []){
-        window.location.reload()
-      }
-    },[])
+    const  prescriptions  = useSelector((store) => store.data?.prescriptions?.["$values"] || []);
     const {message} = useSelector((store)=> store.data);
     console.log(prescriptions)
 
     const dispatch = useDispatch();
 
-    const {
-      data: { user1 },
-    } = useSelector((state) => state.auth);
-    const user = user1;
  
+    const [refresh, setRefresh] = React.useState(false);
 
   useEffect(() => {
     dispatch(GetAllPrescription(token1));
-  }, []);
+  }, [refresh]);
 
     return (
         <>
 
-         {prescriptions != null && prescriptions.length && (user?.dentistId) ? (
+         {prescriptions && prescriptions.length > 0 ? (
       <div className="patientDetails1">
-        <h1>Patient Note Details</h1>
+        <h1>Prescription Details</h1>
         <div className="patientBox1">
           <Table columns={columns} dataSource={prescriptions} />
         </div>

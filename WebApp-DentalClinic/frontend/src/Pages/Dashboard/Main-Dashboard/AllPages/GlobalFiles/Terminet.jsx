@@ -14,18 +14,19 @@ const Terminet = () => {
     { title: "Time", dataIndex: "ora", key: "ora" },
     { title: "Symptoms", dataIndex: "ceshtja", key: "ceshtja" },
     { title: "Patient-ID", dataIndex: "patientId", key: "patientId" },
-    { title: "Email", dataIndex: ['patient', 'email'], key: ['patient', 'email'] },
     {
       title: "Actions", key: "action", render: (record) => {
         return (
           <>
             <EditFilled className="edit" onClick={() => {
         
-              return navigate(`/editTermini/${record.terminetId}`);
+              return navigate(`/EditTermini/${record.terminetId}`);
             }} />
             <DeleteOutlined className="edit" style={{ color: "red", marginLeft: 10 }} onClick={() =>
 
-              dispatch(DeleteTerminet(record.terminetId,token1))
+              dispatch(DeleteTerminet(record.terminetId,token1)).then(() => {
+                setRefresh(!refresh);
+              })
             } />
           </>
         )
@@ -35,26 +36,23 @@ const Terminet = () => {
 
   const navigate = useNavigate();
 
-  const { terminets } = useSelector((store) => store.data);
+  const  terminets  = useSelector((store) => store.data?.terminets?.["$values"] || []);
   const { message } = useSelector((store) => store.data);
 
   const {token1} = useSelector((store)=>store.auth.data);
 
   const dispatch = useDispatch();
-  const {
-    data: { user1 },
-  } = useSelector((state) => state.auth);
-  const user = user1;
 
+  const [refresh, setRefresh] = React.useState(false);
   useEffect(() => {
     dispatch(GetAllTerminet(token1));
-  }, []);
+  }, [refresh]);
 
   return (
     <>
 
-      {terminets.length &&  (user?.dentistId ||  user?.adminId) ?
-        (<div className="patientDetails1">
+      {terminets.length > 0  ?(
+        <div className="patientDetails1">
           <h1>Appointments Details</h1>
           <div className="patientBox1">
             <Table columns={columns} dataSource={terminets} />

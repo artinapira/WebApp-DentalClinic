@@ -14,6 +14,7 @@ function Dentists() {
     const loading = useSelector(state => state.data.loading);
     const error = useSelector(state => state.data.error);
 
+    console.log('dentistData: ',dentistData);
     const [selectedDentist, setSelectedDentist] = useState(null);
 
     useEffect(() => {
@@ -22,10 +23,16 @@ function Dentists() {
         }
     }, [dispatch, token1]);
 
-    const dentists = dentistData?.data?.$values || [];
+    const dentists = Array.isArray(dentistData) ? dentistData : [];
+    console.log('Dentists: ',dentists);
 
     const handleCheck = (dentist) => {
-        setSelectedDentist(dentist);
+        try {
+            console.log("Selected dentist:", dentist);
+            setSelectedDentist(dentist);
+        } catch (error) {
+            console.error("Error handling dentist check:", error);
+        }
     };
 
     const columns = [

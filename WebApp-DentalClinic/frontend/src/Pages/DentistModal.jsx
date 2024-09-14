@@ -31,21 +31,27 @@ const DentistModal = ({ dentist, onClose }) => {
                 title={`Dentist: ${dentist?.emriMbiemri}`}
                 open={!!dentist}
                 onCancel={onClose}
-                footer={[
+                footer={null} // Remove default footer to customize
+                centered
+                className="dentist-modal" // Custom class for additional styling
+            >
+                <div className="modal-content">
+                    <p><strong>ID:</strong> {dentist?.dentistId}</p>
+                    <p><strong>Name:</strong> {dentist?.emriMbiemri}</p>
+                    <p><strong>Degree:</strong> {dentist?.degree}</p>
+                    <p><strong>Schedule:</strong> {dentist?.orari}</p>
+                    <p><strong>Salary:</strong> {dentist?.paga}</p>
+                    <p><strong>Department ID:</strong> {dentist?.departmentId}</p>
+                </div>
+                
+                <div className="modal-footer">
                     <Button key="complaint" type="primary" onClick={openComplaintModal}>
                         Make Complaint
-                    </Button>,
+                    </Button>
                     <Button key="rate" type="default" onClick={openRatingModal}>
                         Rate Dentist
                     </Button>
-                ]}
-            >
-                <p><strong>ID:</strong> {dentist?.dentistId}</p>
-                <p><strong>Name:</strong> {dentist?.emriMbiemri}</p>
-                <p><strong>Degree:</strong> {dentist?.degree}</p>
-                <p><strong>Schedule:</strong> {dentist?.orari}</p>
-                <p><strong>Salary:</strong> {dentist?.paga}</p>
-                <p><strong>Department ID:</strong> {dentist?.departmentId}</p>
+                </div>
             </Modal>
 
             {/* Complaint Modal */}

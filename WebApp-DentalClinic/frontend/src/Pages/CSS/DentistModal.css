@@ -1,67 +1,61 @@
-/* Modal Background */
-.modal-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
+/* General Modal Styles */
+.dentist-modal .antd-modal {
+    border-radius: 8px; /* Rounded corners for the modal */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern font family */
+}
+
+.dentist-modal .antd-modal-header {
+    background: #007bff; /* Primary color for the header */
+    color: #ffffff; /* White text color */
+    border-bottom: 1px solid #0056b3; /* Darker border for better contrast */
+    border-radius: 8px 8px 0 0; /* Rounded top corners */
+}
+
+.dentist-modal .antd-modal-title {
+    color: #ffffff; /* White title text */
+    font-size: 18px; /* Slightly larger font size for the title */
+}
+
+.dentist-modal .antd-modal-body {
+    background: #f8f9fa; /* Light gray background for modal content */
+    color: #495057; /* Darker text color for readability */
+    font-size: 16px; /* Larger font size for better readability */
+    line-height: 1.5; /* Improve readability with line-height */
+}
+
+.dentist-modal .modal-footer {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
+    justify-content: space-between; /* Position buttons in the corners */
+    padding: 16px; /* Add padding for spacing */
+    background: #f8f9fa; /* Match the body background color */
+    border-top: 1px solid #dee2e6; /* Subtle border to separate footer */
 }
 
-/* Modal Container */
-.modal-container {
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 500px;
-    padding: 20px;
-    position: relative;
+.dentist-modal .antd-btn-primary, .dentist-modal .antd-btn-default {
+    border-radius: 4px; /* Rounded corners for buttons */
+    padding: 10px 20px; /* Adequate padding for buttons */
+    font-size: 16px; /* Larger font size for button text */
+    transition: background-color 0.3s, border-color 0.3s; /* Smooth transition for hover effects */
 }
 
-
-/* Content */
-.modal-content {
-    margin-bottom: 20px;
+.dentist-modal .antd-btn-primary {
+    background: #ffffff; /* Primary button background color */
+    border-color: #dee2e6; /* Primary button border color */
+    color: #007bff; /* White text color */
 }
 
-.modal-content h2 {
-    margin-top: 0;
-    font-size: 20px;
-    color: #333;
+.dentist-modal .antd-btn-primary:hover {
+    background: #f1f3f5; /* Darker blue on hover */
+    border-color: #0056b3; /* Border color on hover */
 }
 
-.modal-content p {
-    margin: 10px 0;
+.dentist-modal .antd-btn-default {
+    background: #ffffff; /* Default button background */
+    border-color: #dee2e6; /* Default button border color */
+    color: #007bff; /* Primary color for text */
 }
 
-/* Buttons */
-.modal-buttons {
-    display: flex;
-    justify-content: space-between;
-}
-
-.modal-buttons button {
-    background: #007bff;
-    border: none;
-    color: #fff;
-    border-radius: 4px;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.modal-buttons button:hover {
-    background: #0056b3;
-}
-
-.modal-buttons button.secondary {
-    background: #6c757d;
-}
-
-.modal-buttons button.secondary:hover {
-    background: #5a6268;
+.dentist-modal .antd-btn-default:hover {
+    background: #f1f3f5; /* Light gray background on hover */
+    border-color: #0056b3; /* Border color on hover */
 }

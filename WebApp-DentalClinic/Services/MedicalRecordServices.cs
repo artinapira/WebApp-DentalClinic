@@ -28,20 +28,9 @@ namespace WebApp_DentalClinic.Services
             _context.SaveChanges();
         }
 
-        public List<MedicalRecordVM> GetAllMedicalRecord()
+        public List<MedicalRecord> GetAllMedicalRecord()
         {
-            var allMedicalRecords = _context.MedicalRecords
-                .Include(m => m.Patient)
-                .Include(m => m.Terapias)
-                .Select(mr => new MedicalRecordVM
-                {
-                    Pershkrimi = mr.Pershkrimi,
-                    Simptomat = mr.Simptomat,
-                    Diagnoza = mr.Diagnoza,
-                    Rezultati = mr.Rezultati,
-                    PatientId = mr.Patient.PatientId,
-                })
-                .ToList();
+            var allMedicalRecords = _context.MedicalRecords.ToList();
 
             return allMedicalRecords;
         }
@@ -57,7 +46,6 @@ namespace WebApp_DentalClinic.Services
                 _medicalRecord.Simptomat = medicalRecord.Simptomat;
                 _medicalRecord.Diagnoza = medicalRecord.Diagnoza;
                 _medicalRecord.Rezultati = medicalRecord.Rezultati;
-                _medicalRecord.PatientId = medicalRecord.PatientId;
 
                 _context.SaveChanges();
             }

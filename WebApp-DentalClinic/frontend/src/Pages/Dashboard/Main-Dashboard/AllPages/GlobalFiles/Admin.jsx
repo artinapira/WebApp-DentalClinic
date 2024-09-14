@@ -22,7 +22,7 @@ const Admin = () => {
           <>
             <EditFilled className="edit" onClick={() => {
   
-              return navigate(`/editAdmin/${record.adminId}`);
+              return navigate(`/EditAdmin/${record.adminId}`);
             }} />
             <DeleteOutlined className="edit" style={{ color: "red", marginLeft: 10 }} onClick={() =>
 

@@ -1,279 +1,359 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Button, Modal, Table, Form, Input, DatePicker, notification } from 'antd';
-import { GetPatient, UpdatePatient } from '../redux/auth/action';
+import React, { useEffect, useState } from "react";
+import "./Dashboard/Main-Dashboard/AllPages/Dentist/Css/Dentist_Profile.css";
+import { BiTime } from "react-icons/bi";
+import { AiFillEdit } from "react-icons/ai";
+import { MdEmail } from "react-icons/md";
+import { BsPersonCircle, BsGenderAmbiguous } from "react-icons/bs";
+import { FaMoneyBillWave, FaMapMarkedAlt, FaBirthdayCake } from "react-icons/fa";
+import { AiOutlineUser, AiOutlineGlobal } from 'react-icons/ai';
+import { GiTooth } from 'react-icons/gi';
+import { useDispatch, useSelector } from "react-redux";
+import { Button, message, Modal, Table } from "antd";
+import { GetPatient, UpdatePatient } from "../redux/auth/action";
 import { GetAllMedicalRecord, GetAllPrescription, GetAllPatientNote, TerminetAdd } from '../redux/Datas/action';
-import './CSS/PatientProfile.css';
+import image from "../Assets/person.png";
 import Navbar from '../Components/Nav/Navbar';
-import moment from 'moment';
-import dayjs from 'dayjs';
 
 const PatientProfile = () => {
-    const dispatch = useDispatch();
-    const [isMedicalRecordVisible, setIsMedicalRecordVisible] = useState(false);
-    const [isPrescriptionVisible, setIsPrescriptionVisible] = useState(false);
-    const [isPatientNoteVisible, setIsPatientNoteVisible] = useState(false);
-    const [isAppointmentVisible, setIsAppointmentVisible] = useState(false);
-    const [isUpdatePatientVisible, setIsUpdatePatientVisible] = useState(false);
+  const dispatch1 = useDispatch();
+  const [isAppointmentVisible, setIsAppointmentVisible] = useState(false);
+  const [isUpdatePatientVisible, setIsUpdatePatientVisible] = useState(false);
+  const [isMedicalRecordsVisible, setIsMedicalRecordsVisible] = useState(false);
+  const [isPrescriptionsVisible, setIsPrescriptionsVisible] = useState(false);
+  const [isPatientNotesVisible, setIsPatientNotesVisible] = useState(false);
 
-    const [appointmentData, setAppointmentData] = useState({
-        dataT: "",
-        ora: "",
-        ceshtja: "",
-        stafiId: "",
-    });
+  const [appointmentData, setAppointmentData] = useState({
+    dataT: "",
+    ora: "",
+    ceshtja: "",
+  });
 
-    const [updatePatientData, setUpdatePatientData] = useState({
-        emriMbiemri: "",
-        dataLindjes: "",
-        gjinia: "",
-        email: "",
-    });
+  const dispatch = useDispatch();
+  const patient = useSelector((state) => state.auth.data.user1);
+  const { token1 } = useSelector((store) => store.auth.data);
+  const loggedInPatientId = patient?.patientId;
 
-    const token1 = useSelector((state) => state.auth.data.token1);
-    const patientData = useSelector((state) => state.auth.data.user1);
-    const loggedInPatientId = patientData?.patientId;
+  const medicalRecords = useSelector((state) => state.data.medicalrecords["$values"] || []);
+  const prescriptions = useSelector((state) => state.data.prescriptions["$values"] || []);
+  const patientNotes = useSelector((state) => state.data.patientnotes["$values"] || []);
 
-    const medicalRecords = useSelector((state) => state.data.medicalrecords["$values"] || []);
-    const prescriptions = useSelector((state) => state.data.prescriptions["$values"] || []);
-    const patientNotes = useSelector((state) => state.data.patientnotes["$values"] || []);
-    const loading = useSelector((state) => state.data.loading);
-    const error = useSelector((state) => state.data.error);
+  useEffect(() => {
+    if (token1 && loggedInPatientId) {
+      dispatch1(GetPatient(loggedInPatientId, token1));
+      dispatch1(GetAllMedicalRecord(token1));
+      dispatch1(GetAllPrescription(token1));
+      dispatch1(GetAllPatientNote(token1));
+    }
+  }, [dispatch, loggedInPatientId, token1]);
 
-    console.log('Loggedin patient: ',patientData);
-    console.log('Patients id: ',loggedInPatientId);
-    const tokenid = token1 && loggedInPatientId;
-    console.log('token id', tokenid);
-    useEffect(() => {
-        if (token1 && loggedInPatientId) {
-            dispatch(GetPatient(loggedInPatientId, token1));
-            dispatch(GetAllMedicalRecord(token1));
-            dispatch(GetAllPrescription(token1));
-            dispatch(GetAllPatientNote(token1));
-        }
-    }, [dispatch, loggedInPatientId, token1]);
-    
+  const filteredMedicalRecords = medicalRecords.filter(record => record.patientId === loggedInPatientId);
+  const filteredPrescriptions = prescriptions.filter(prescription => prescription.patientId === loggedInPatientId);
+  const filteredPatientNotes = patientNotes.filter(note => note.patientId === loggedInPatientId);
 
-    const filteredMedicalRecords = medicalRecords.filter(record => record.patientId === loggedInPatientId);
-    const filteredPrescriptions = prescriptions.filter(prescription => prescription.patientId === loggedInPatientId);
-    const filteredPatientNotes = patientNotes.filter(note => note.patientId === loggedInPatientId);
+  const [formData, setFormData] = useState({
+    emriMbiemri: '',
+    dataLindjes: '',
+    gjinia: '',
+    username: '',
+    email: '',
+  });
 
-    const handleShowMedicalRecords = () => setIsMedicalRecordVisible(true);
-    const handleShowPrescriptions = () => setIsPrescriptionVisible(true);
-    const handleShowPatientNotes = () => setIsPatientNoteVisible(true);
+  useEffect(() => {
+    if (patient) {
+      setFormData({
+        emriMbiemri: patient.emriMbiemri,
+        dataLindjes: patient.dataLindjes,
+        gjinia: patient.gjinia,
+        username: patient.username,
+        email: patient.email,
+      });
+    }
+  }, [patient]);
 
-    const handleAppointmentSubmit = () => {
-        const { dataT, ora, ceshtja } = appointmentData;
-        const requestBody = {
-            dataT,
-            ora,
-            ceshtja,
-            pacientiId: loggedInPatientId,
-        };
+  const handleFormChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-        dispatch(TerminetAdd(requestBody, token1));
-        setIsAppointmentVisible(false);
-        notification.success({
-            message: 'Success',
-            description: 'Appointment made successfully.',
-        });
+  const handleFormSubmit = () => {
+    const form = {
+      ...formData,
+      email: patient.email,
+      password: patient.password,
+    };
+    dispatch(UpdatePatient(form, patient.patientId, token1));
+    message.success("Updated");
+    setIsUpdatePatientVisible(false);
+  };
+
+  // Appointment modal handlers
+  const handleShowAppointmentModal = () => setIsAppointmentVisible(true);
+  const handleCancelAppointment = () => setIsAppointmentVisible(false);
+
+  const handleAppointmentSubmit = () => {
+    const { dataT, ora, ceshtja } = appointmentData;
+    const requestBody = {
+      dataT,
+      ora,
+      ceshtja,
+      pacientiId: loggedInPatientId,
     };
 
-    const handleUpdatePatientSubmit = async () => {
-        const { emriMbiemri, dataLindjes, gjinia, username, email } = updatePatientData;
-        const requestBody = {
-            emriMbiemri,
-            dataLindjes,
-            gjinia,
-            username,
-            email,
-        };
+    dispatch(TerminetAdd(requestBody, token1));
+    setIsAppointmentVisible(false);
+    message.success("Appointment made successfully.");
+  };
 
-        try {
-            await dispatch(UpdatePatient(requestBody, loggedInPatientId, token1));
-            notification.success({
-                message: 'Profile Updated',
-                description: 'Your profile has been successfully updated.',
-            });
-            setTimeout(() => {
-                window.location.reload();
-            }, 1500);
-        } catch (error) {
-            notification.error({
-                message: 'Update Failed',
-                description: 'There was an error updating your profile. Please try again later.',
-            });
-        }
+  // Modal handlers for other sections
+  const handleShowMedicalRecordsModal = () => setIsMedicalRecordsVisible(true);
+  const handleCancelMedicalRecordsModal = () => setIsMedicalRecordsVisible(false);
 
-        setIsUpdatePatientVisible(false);
-    };
+  const handleShowPrescriptionsModal = () => setIsPrescriptionsVisible(true);
+  const handleCancelPrescriptionsModal = () => setIsPrescriptionsVisible(false);
 
-    const handleAppointmentChange = (e) => {
-        const { name, value } = e.target;
-        setAppointmentData((prevData) => ({ ...prevData, [name]: value }));
-    };
+  const handleShowPatientNotesModal = () => setIsPatientNotesVisible(true);
+  const handleCancelPatientNotesModal = () => setIsPatientNotesVisible(false);
 
-    const handleUpdatePatientChange = (e) => {
-        const { name, value } = e.target;
-        setUpdatePatientData((prevData) => ({ ...prevData, [name]: value }));
-    };
+  // Columns for Medical Records, Prescriptions, and Patient Notes
+  const medicalRecordColumns = [
+    { title: 'Description', dataIndex: 'pershkrimi', key: 'pershkrimi' },
+    { title: 'Symptoms', dataIndex: 'simptomat', key: 'simptomat' },
+    { title: 'Diagnosis', dataIndex: 'diagnoza', key: 'diagnoza' },
+    { title: 'Results', dataIndex: 'rezultati', key: 'rezultati' },
+  ];
 
-    const handleDateChange = (date, dateString) => {
-        setAppointmentData((prevData) => ({ ...prevData, dataT: dateString }));
-    };
+  const prescriptionColumns = [
+    { title: 'Diagnosis', dataIndex: 'diagnoza', key: 'diagnoza' },
+    { title: 'Medicine', dataIndex: 'medicina', key: 'medicina' },
+  ];
 
-    const medicalRecordColumns = [
-        { id: 'MR-ID', title: 'Description', dataIndex: 'pershkrimi', key: 'pershkrimi' },
-        { id: 'MR-ID', title: 'Symptoms', dataIndex: 'simptomat', key: 'simptomat' },
-        { id: 'MR-ID', title: 'Diagnosis', dataIndex: 'diagnoza', key: 'diagnoza' },
-        { id: 'MR-ID', title: 'Results', dataIndex: 'rezultati', key: 'rezultati' },
-    ];
+  const patientNoteColumns = [
+    { title: 'Description', dataIndex: 'pershkrimi', key: 'pershkrimi' },
+  ];
 
-    const prescriptionColumns = [
-        { id: 'P-ID', title: 'Diagnosis', dataIndex: 'diagnoza', key: 'diagnoza' },
-        { id: 'P-ID', title: 'Medicine', dataIndex: 'medicina', key: 'medicina' },
-    ];
+  return (
+    <>
+      <Navbar />
+      <div className="container1">
+        <div className="AfterSideBar1">
+          <div className="maindoctorProfile">
+            <div className="firstBox">
+              <img src={image} alt="patientimg" />
+              <hr />
+              <div className="singleitemdiv">
+                <BsPersonCircle className="singledivicons" />
+                <p>{formData.emriMbiemri}</p>
+              </div>
+              <div className="singleitemdiv">
+                <FaBirthdayCake className="singledivicons" />
+                <p>{formData.dataLindjes}</p>
+              </div>
+              <div className="singleitemdiv">
+                <BsGenderAmbiguous className="singledivicons" />
+                <p>{formData.gjinia}</p>
+              </div>
+              <div className="singleitemdiv">
+                <MdEmail className="singledivicons" />
+                <p>{formData.email}</p>
+              </div>
 
-    const patientNoteColumns = [
-        { id: 'PN-ID', title: 'Description', dataIndex: 'pershkrimi', key: 'pershkrimi' },
-    ];
+              <div className="singleitemdiv">
+                <button onClick={() => setIsUpdatePatientVisible(true)} className="singleitemdiv buttonstyle">
+                  <AiFillEdit />
+                  Edit profile
+                </button>
+              </div>
 
-    return (
-        <div>
-            <Navbar />
-            <div className="patient-profile">
-                <h1>Patient Profile</h1>
-                {loading && <p>Loading...</p>}
-                {error && <p>{typeof error === 'string' ? error : 'An error occurred'}</p>}
-                {patientData && (
-                    <div className="profile-info">
-                        <p><strong>Patient ID:</strong> {patientData.patientId}</p>
-                        <p><strong>Name:</strong> {patientData.emriMbiemri}</p>
-                        <p><strong>Birthdate:</strong> {patientData.dataLindjes}</p>
-                        <p><strong>Gender:</strong> {patientData.gjinia}</p>
-                        <p><strong>Username:</strong> {patientData.username}</p>
-                        <p><strong>Email:</strong> {patientData.email}</p>
-
-                        <Button onClick={handleShowMedicalRecords} className="add-btn">My Medical Records</Button>
-                        <Button onClick={handleShowPrescriptions} className="add-btn">My Prescriptions</Button>
-                        <Button onClick={handleShowPatientNotes} className="add-btn">My Patient Notes</Button>
-                        <Button onClick={() => setIsAppointmentVisible(true)} className="add-btn">Add Appointment</Button>
-                        <Button onClick={() => setIsUpdatePatientVisible(true)} className="add-btn">Update Profile</Button>
-                    </div>
-                )}
-
-                {/* Appointment Modal */}
-                <Modal
-                    title="Add Appointment"
-                    open={isAppointmentVisible}
-                    onCancel={() => setIsAppointmentVisible(false)}
-                    footer={[
-                        <Button key="cancel" onClick={() => setIsAppointmentVisible(false)}>
-                            Cancel
-                        </Button>,
-                        <Button key="submit" type="primary" onClick={handleAppointmentSubmit}>
-                            Submit
-                        </Button>,
-                    ]}
-                >
-                    <Form>
-                        <Form.Item label="Date">
-                            <DatePicker 
-                                format="YYYY-MM-DD" 
-                                value={appointmentData.dataT ? dayjs(appointmentData.dataT) : null} 
-                                onChange={handleDateChange} 
-                            />
-                        </Form.Item>
-                        <Form.Item label="Time">
-                            <Input name="ora" onChange={handleAppointmentChange} />
-                        </Form.Item>
-                        <Form.Item label="Reason">
-                            <Input name="ceshtja" onChange={handleAppointmentChange} />
-                        </Form.Item>
-                    </Form>
-                </Modal>
-
-                {/* Update Patient Profile Modal */}
-                <Modal
-                    title="Update Patient Profile"
-                    open={isUpdatePatientVisible}
-                    onCancel={() => setIsUpdatePatientVisible(false)}
-                    footer={[
-                        <Button key="cancel" onClick={() => setIsUpdatePatientVisible(false)}>
-                            Cancel
-                        </Button>,
-                        <Button key="submit" type="primary" onClick={handleUpdatePatientSubmit}>
-                            Submit
-                        </Button>,
-                    ]}
-                >
-                    <Form>
-                        <Form.Item label="Full Name">
-                            <Input name="emriMbiemri" value={updatePatientData.emriMbiemri} onChange={handleUpdatePatientChange} />
-                        </Form.Item>
-                        <Form.Item label="Birthdate">
-                            <DatePicker 
-                                format="YYYY-MM-DD" 
-                                value={updatePatientData.dataLindjes ? dayjs(updatePatientData.dataLindjes) : null} 
-                                onChange={(date, dateString) => setUpdatePatientData((prevData) => ({ ...prevData, dataLindjes: dateString }))} 
-                            />
-                        </Form.Item>
-                        <Form.Item label="Gender">
-                            <Input name="gjinia" value={updatePatientData.gjinia} onChange={handleUpdatePatientChange} />
-                        </Form.Item>
-                        <Form.Item label="Username">
-                            <Input name="username" value={updatePatientData.username} onChange={handleUpdatePatientChange} />
-                        </Form.Item>
-                        <Form.Item label="Email">
-                            <Input name="email" value={updatePatientData.email} onChange={handleUpdatePatientChange} />
-                        </Form.Item>
-                    </Form>
-                </Modal>
-
-                {/* Medical Records Table */}
-                <Modal
-                    title="Medical Records"
-                    open={isMedicalRecordVisible}
-                    onCancel={() => setIsMedicalRecordVisible(false)}
-                    footer={[
-                        <Button key="close" onClick={() => setIsMedicalRecordVisible(false)}>
-                            Close
-                        </Button>,
-                    ]}
-                >
-                    <Table columns={medicalRecordColumns} dataSource={filteredMedicalRecords} rowKey="MR-ID" />
-                </Modal>
-
-                {/* Prescriptions Table */}
-                <Modal
-                    title="Prescriptions"
-                    open={isPrescriptionVisible}
-                    onCancel={() => setIsPrescriptionVisible(false)}
-                    footer={[
-                        <Button key="close" onClick={() => setIsPrescriptionVisible(false)}>
-                            Close
-                        </Button>,
-                    ]}
-                >
-                    <Table columns={prescriptionColumns} dataSource={filteredPrescriptions} rowKey="P-ID" />
-                </Modal>
-
-                {/* Patient Notes Table */}
-                <Modal
-                    title="Patient Notes"
-                    open={isPatientNoteVisible}
-                    onCancel={() => setIsPatientNoteVisible(false)}
-                    footer={[
-                        <Button key="close" onClick={() => setIsPatientNoteVisible(false)}>
-                            Close
-                        </Button>,
-                    ]}
-                >
-                    <Table columns={patientNoteColumns} dataSource={filteredPatientNotes} rowKey="PN-ID" />
-                </Modal>
+              <Modal
+                title="Edit Patient Details"
+                open={isUpdatePatientVisible}
+                onCancel={() => setIsUpdatePatientVisible(false)}
+                footer={[
+                  <Button key="back" onClick={() => setIsUpdatePatientVisible(false)}>
+                    Cancel
+                  </Button>,
+                  <Button key="submit" type="primary" onClick={handleFormSubmit}>
+                    Save Changes
+                  </Button>,
+                ]}
+              >
+                <form className="inputForm">
+                  <label htmlFor="emriMbiemri">Full Name</label>
+                  <input
+                    name="emriMbiemri"
+                    value={formData.emriMbiemri}
+                    onChange={handleFormChange}
+                    type="text"
+                    placeholder="Full name"
+                  />
+                  <label htmlFor="dataLindjes">Birthdate</label>
+                  <input
+                    name="dataLindjes"
+                    value={formData.dataLindjes}
+                    onChange={handleFormChange}
+                    type="date"
+                  />
+                  <label htmlFor="gjinia">Gender</label>
+                  <select name="gjinia" value={formData.gjinia} onChange={handleFormChange}>
+                    <option value="">Select gender</option>
+                    <option value="m">Male</option>
+                    <option value="f">Female</option>
+                  </select>
+                  <label htmlFor="username">Username</label>
+                  <input
+                    name="username"
+                    value={formData.username}
+                    onChange={handleFormChange}
+                    type="text"
+                    placeholder="Username"
+                  />
+                  <label htmlFor="email">Email</label>
+                  <input
+                    name="email"
+                    value={formData.email}
+                    onChange={handleFormChange}
+                    type="text"
+                    placeholder="Email"
+                  />
+                </form>
+              </Modal>
             </div>
+
+            {/* ***********  Second Div (Other Info Section) ******************** */}
+            <div className="SecondBox">
+              <div className="subfirstbox">
+                <h2 style={{ textAlign: "center" }}>Make an Appointment</h2>
+
+                <div className="singleitemdiv">
+                  <Button type="primary" onClick={handleShowAppointmentModal} className="singleitemdiv buttonstyle">
+                    Add Appointment
+                  </Button>
+                  <p>Add Appointment</p>
+                </div>
+                <Modal
+                  title="Add Appointment"
+                  open={isAppointmentVisible}
+                  onCancel={handleCancelAppointment}
+                  footer={[
+                    <Button key="cancel" onClick={handleCancelAppointment}>
+                      Cancel
+                    </Button>,
+                    <Button key="submit" type="primary" onClick={handleAppointmentSubmit}>
+                      Submit
+                    </Button>,
+                  ]}
+                >
+                  <form className="inputForm">
+                    <label>Date</label>
+                    <input
+                      name="dataT"
+                      value={appointmentData.dataT}
+                      onChange={(e) => setAppointmentData({ ...appointmentData, dataT: e.target.value })}
+                      type="date"
+                    />
+                    <label>Time</label>
+                    <input
+                      name="ora"
+                      value={appointmentData.ora}
+                      onChange={(e) => setAppointmentData({ ...appointmentData, ora: e.target.value })}
+                      type="time"
+                    />
+                    <label>Issue</label>
+                    <input
+                      name="ceshtja"
+                      value={appointmentData.ceshtja}
+                      onChange={(e) => setAppointmentData({ ...appointmentData, ceshtja: e.target.value })}
+                      type="text"
+                      placeholder="Issue"
+                    />
+                  </form>
+                </Modal>
+                </div>
+
+                <div className="subfirstbox">
+                <h2 style={{ textAlign: "center" }}>Medical Records</h2>
+
+                <div className="singleitemdiv">
+                  <Button type="primary" onClick={handleShowMedicalRecordsModal} className="singleitemdiv buttonstyle">
+                    My Medical Records
+                  </Button>
+                  <p>My Medical Records</p>
+                </div>
+                <Modal
+                  title="My Medical Records"
+                  open={isMedicalRecordsVisible}
+                  onCancel={handleCancelMedicalRecordsModal}
+                  footer={[
+                    <Button key="cancel" onClick={handleCancelMedicalRecordsModal}>
+                      Close
+                    </Button>,
+                  ]}
+                >
+                  <Table
+                    dataSource={filteredMedicalRecords}
+                    columns={medicalRecordColumns}
+                    pagination={false}
+                    rowKey="medicalRecordId"
+                  />
+                </Modal>
+                </div>
+                <div className="subfirstbox">
+                <h2 style={{ textAlign: "center" }}>Prescriptions</h2>
+                <div className="singleitemdiv">
+                  <Button type="primary" onClick={handleShowPrescriptionsModal} className="singleitemdiv buttonstyle">
+                    My Prescriptions
+                  </Button>
+                  <p>My Prescriptions</p>
+                </div>
+                <Modal
+                  title="My Prescriptions"
+                  open={isPrescriptionsVisible}
+                  onCancel={handleCancelPrescriptionsModal}
+                  footer={[
+                    <Button key="cancel" onClick={handleCancelPrescriptionsModal}>
+                      Close
+                    </Button>,
+                  ]}
+                >
+                  <Table
+                    dataSource={filteredPrescriptions}
+                    columns={prescriptionColumns}
+                    pagination={false}
+                    rowKey="prescriptionId"
+                  />
+                </Modal>
+                </div>
+                <div className="subfirstbox">
+                <h2 style={{ textAlign: "center" }}>Patient Notes</h2>
+                <div className="singleitemdiv">
+                  <Button type="primary" onClick={handleShowPatientNotesModal} className="singleitemdiv buttonstyle">
+                    My Patient Notes
+                  </Button>
+                  <p>My Patient Notes</p>
+                </div>
+                <Modal
+                  title="My Patient Notes"
+                  open={isPatientNotesVisible}
+                  onCancel={handleCancelPatientNotesModal}
+                  footer={[
+                    <Button key="cancel" onClick={handleCancelPatientNotesModal}>
+                      Close
+                    </Button>,
+                  ]}
+                >
+                  <Table
+                    dataSource={filteredPatientNotes}
+                    columns={patientNoteColumns}
+                    pagination={false}
+                    rowKey="patientNoteId"
+                  />
+                </Modal>
+                </div>
+            </div>
+          </div>
         </div>
-    );
+      </div>
+    </>
+  );
 };
 
 export default PatientProfile;

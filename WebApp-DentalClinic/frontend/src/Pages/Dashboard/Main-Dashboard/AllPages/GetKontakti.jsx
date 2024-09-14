@@ -11,13 +11,12 @@ import { DeleteKontakti, GetAllKontaktet } from "../../../../redux/Datas/action"
 
 const Kontaktet = () => {
   
-  const {
-    data: { user1 },
-  } = useSelector((state) => state.auth);
+  const admin = useSelector((state) => state.auth.data.admin);
   
-  const user = user1;
+  console.log('admin in kontaktet: ',admin);
 
   const {token1} = useSelector((store) => store.auth.data);
+  console.log('token: ',token1);
 
 
 
@@ -32,7 +31,9 @@ const Kontaktet = () => {
           <>
           
           <DeleteOutlined className="edit" style={{color:"red",marginLeft:10}} onClick={()=>
-            dispatch(DeleteKontakti(record.kontaktiId,token1))
+            dispatch(DeleteKontakti(record.kontaktiId,token1)).then(() => {
+              setRefresh(!refresh);
+            })
           }/>
           </>
         )
@@ -40,20 +41,22 @@ const Kontaktet = () => {
     ];
 
 
-    const { kontaktet } = useSelector((store) => store.data);
+    const  kontaktet  = useSelector((store) => store.data.kontaktet["$values"] || []);
     const {message} = useSelector((store)=> store.data);
+    console.log('kontaktet: ',kontaktet);
 
 
     const dispatch = useDispatch();
 
+    const [refresh, setRefresh] = React.useState(false);
 
     useEffect(() => {
       dispatch(GetAllKontaktet(token1));
-    }, []);
+    }, [refresh]);
 
     return (
         <>
-         {kontaktet != null && kontaktet.length && user?.adminId ?
+         {kontaktet && kontaktet.length > 0 && admin?.adminId ?
       (<div className="patientDetails1">
         <h1>Contact Details</h1>
         <div className="patientBox">

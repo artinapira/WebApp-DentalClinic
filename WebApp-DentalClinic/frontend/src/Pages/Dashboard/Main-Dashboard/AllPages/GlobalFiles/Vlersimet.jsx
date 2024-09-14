@@ -11,11 +11,9 @@ import { DeleteVlersimet, GetAllVlersimet } from "../../../../../redux/Datas/act
 
 const Vlersimet = () => {
   
-  const {
-    data: { user1 },
-  } = useSelector((state) => state.auth);
+  const {dentist, admin} = useSelector((state) => state.auth.data);
   
-  const user = user1;
+  const user = admin;
 
   const {token1} = useSelector((store) => store.auth.data);
 
@@ -33,7 +31,9 @@ const Vlersimet = () => {
           <>
           
           <DeleteOutlined className="edit" style={{color:"red",marginLeft:10}} onClick={()=>
-            dispatch(DeleteVlersimet(record.vlersimetId,token1))
+            dispatch(DeleteVlersimet(record.vlersimetId,token1)).then(() => {
+              setRefresh(!refresh);
+            })
           }/>
           </>
         )
@@ -41,22 +41,23 @@ const Vlersimet = () => {
     ];
 
 
-    const { vlersimets } = useSelector((store) => store.data);
+    const  vlersimets  = useSelector((store) => store.data.vlersimets["$values"] || []);
     const {message} = useSelector((store)=> store.data);
 
 
     const dispatch = useDispatch();
 
+    const [refresh, setRefresh] = React.useState(false);
 
     useEffect(() => {
       dispatch(GetAllVlersimet(token1));
-    }, []);
+    }, [refresh]);
 
     return (
         <>
-         {vlersimets != null && vlersimets.length && user?.adminId ?
+         {vlersimets && vlersimets.length > 0 && user?.adminId ?
       (<div className="patientDetails1">
-        <h1>Ankesa</h1>
+        <h1>Vlersimet</h1>
         <div className="patientBox">
           <Table columns={columns} dataSource={vlersimets} />
         </div>

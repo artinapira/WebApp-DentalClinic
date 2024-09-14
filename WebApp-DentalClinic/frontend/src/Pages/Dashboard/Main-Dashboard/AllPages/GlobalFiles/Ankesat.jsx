@@ -11,11 +11,9 @@ import { DeleteAnkesat, GetAllAnkesat } from "../../../../../redux/Datas/action"
 
 const Ankesat = () => {
   
-  const {
-    data: { user1 },
-  } = useSelector((state) => state.auth);
+  const admin = useSelector((state) => state.auth.data.admin);
+  console.log('Admin in ankesat: ',admin);
   
-  const user = user1;
 
   const {token1} = useSelector((store) => store.auth.data);
 
@@ -32,7 +30,9 @@ const Ankesat = () => {
           <>
           
           <DeleteOutlined className="edit" style={{color:"red",marginLeft:10}} onClick={()=>
-            dispatch(DeleteAnkesat(record.ankesatId,token1))
+            dispatch(DeleteAnkesat(record.ankesatId,token1)).then(() => {
+              setRefresh(!refresh);
+            })
           }/>
           </>
         )
@@ -40,20 +40,22 @@ const Ankesat = () => {
     ];
 
 
-    const { ankesats } = useSelector((store) => store.data);
+    const  ankesats  = useSelector((store) => store.data.ankesats["$values"] || []);
+    console.log('ankesat',ankesats);
     const {message} = useSelector((store)=> store.data);
 
 
     const dispatch = useDispatch();
 
+    const [refresh, setRefresh] = React.useState(false);
 
     useEffect(() => {
       dispatch(GetAllAnkesat(token1));
-    }, []);
+    }, [refresh]);
 
     return (
         <>
-         {ankesats != null && ankesats.length && user?.adminId ?
+         {ankesats && ankesats.length > 0 && admin?.adminId ?
       (<div className="patientDetails1">
         <h1>Ankesa</h1>
         <div className="patientBox">

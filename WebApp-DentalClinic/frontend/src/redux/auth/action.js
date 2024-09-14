@@ -379,6 +379,10 @@ export const GetAnkesa = (id,token) => async (dispatch) => {
       }}
     );
 
+    dispatch({
+      type: types.GET_ANKESAT_SUCCESS,
+      payload: res.data,
+    });
     return res.data;
   }
   catch(error){
@@ -679,6 +683,10 @@ export const GetMedicalRecord = (id,token) => async (dispatch) => {
       }}
     );
 
+    dispatch({
+      type: types.GET_MEDICALRECORD_SUCCESS,
+      payload: res.data,
+    });
     return res.data;
   }
   catch(error){
@@ -702,8 +710,8 @@ export const UpdateMedicalRecord= (data, id,token) => async (dispatch) => {
       }}
     );
           
-  dispatch({ type: types.EDIT_MEDICALRECORD_SUCCESS, payload: res.data.data });
-  return res.data.data;
+  dispatch({ type: types.EDIT_MEDICALRECORD_SUCCESS, payload: res.data });
+  return res.data;
 } catch (error) {
   ;
   dispatch({
@@ -723,7 +731,10 @@ export const GetPatientNote = (id,token) => async (dispatch) => {
           Authorization: "Bearer " + token
       }}
     );
-
+    dispatch({
+      type: types.GET_PATIENTNOTE_SUCCESS,
+      payload: res.data,
+    });
     return res.data;
   }
   catch(error){
@@ -747,8 +758,8 @@ export const UpdatePatientNote= (data, id,token) => async (dispatch) => {
       }}
     );
           
-  dispatch({ type: types.EDIT_PATIENTNOTE_SUCCESS, payload: res.data.data });
-  return res.data.data;
+  dispatch({ type: types.EDIT_PATIENTNOTE_SUCCESS, payload: res.data });
+  return res.data;
 } catch (error) {
   ;
   dispatch({
@@ -768,7 +779,10 @@ export const GetPrescription = (id,token) => async (dispatch) => {
           Authorization: "Bearer " + token
       }}
     );
-
+    dispatch({
+      type: types.GET_PRESCRIPTION_SUCCESS,
+      payload: res.data,
+    });
     return res.data;
   }
   catch(error){
@@ -792,8 +806,8 @@ export const UpdatePrescription= (data, id,token) => async (dispatch) => {
       }}
     );
           
-  dispatch({ type: types.EDIT_PRESCRIPTION_SUCCESS, payload: res.data.data });
-  return res.data.data;
+  dispatch({ type: types.EDIT_PRESCRIPTION_SUCCESS, payload: res.data });
+  return res.data;
 } catch (error) {
   ;
   dispatch({
@@ -858,7 +872,10 @@ export const GetTerminet = (id,token) => async (dispatch) => {
           Authorization: "Bearer " + token
       }}
     );
-
+    dispatch({
+      type: types.GET_TERMINET_SUCCESS,
+      payload: res.data,
+    });
     return res.data;
   }
   catch(error){
@@ -882,8 +899,9 @@ export const UpdateTerminet= (data, id,token) => async (dispatch) => {
       }}
     );
           
-  dispatch({ type: types.EDIT_TERMINET_SUCCESS, payload: res.data.data });
-  return res.data.data;
+  dispatch({ type: types.EDIT_TERMINET_SUCCESS, payload: res.data });
+  console.log('Terminei action: ',res.data);
+  return res.data;
 } catch (error) {
   ;
   dispatch({
@@ -903,7 +921,10 @@ export const GetVlersimet = (id,token) => async (dispatch) => {
           Authorization: "Bearer " + token
       }}
     );
-
+    dispatch({
+      type: types.GET_VLERSIMET_SUCCESS,
+      payload: res.data,
+    });
     return res.data;
   }
   catch(error){
