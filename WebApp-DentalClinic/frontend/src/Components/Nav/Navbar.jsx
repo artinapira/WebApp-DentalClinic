@@ -44,7 +44,7 @@ function Navbars() {
                             </Link>
                         )}
                         
-                        {(user1?.patientId || admin) && !dentist && (
+                        {!dentist?.dentistId && (
                             <Link to="/Dentists" className="nav-link">
                                 <span>Dentists</span>
                             </Link>

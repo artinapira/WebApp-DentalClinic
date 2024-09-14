@@ -10,9 +10,12 @@ import Img5 from '../Assets/image6.png';
 import Img7 from '../Assets/image7.png';
 import Img8 from '../Assets/image8.png';
 import Img9 from '../Assets/image9.png';
+import { useDispatch, useSelector } from "react-redux";
 
 
 const Marketing = () => {
+  const dispatch = useDispatch();
+    const { token1, user1, dentist, admin } = useSelector((store) => store.auth.data);
   return (
     <><Navbar />
     <section className="marketing-section">

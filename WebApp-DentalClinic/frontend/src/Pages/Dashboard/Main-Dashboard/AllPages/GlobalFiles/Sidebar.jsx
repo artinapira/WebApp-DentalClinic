@@ -7,7 +7,7 @@ import { BiDetail } from "react-icons/bi";
 import { CgProfile } from "react-icons/cg";
 import { FaHospitalUser,FaUserMd } from "react-icons/fa";
 import { TbReportMedical } from "react-icons/tb";
-import { MdBedroomChild } from "react-icons/md";
+import { MdBedroomChild, MdHome } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { ImMenu } from "react-icons/im";
 import { FiLogOut } from "react-icons/fi";
@@ -64,6 +64,17 @@ console.log('Data of admin sidebar',admin);
             </div>
           </div>
           <div className="bottomSection">
+            <Link className="link1" activeclassname="active" to={"/Home"}>
+              <div className="icon1">
+                <MdHome className="mainIcon1" />
+              </div>
+              <div
+                style={{ display: isOpen ? "block" : "none" }}
+                className="link_text1"
+              >
+                Home
+              </div>
+            </Link>
             <Link className="link1" activeclassname="active" to={"/dashboard"}>
               <div className="icon1">
                 <MdDashboardCustomize className="mainIcon1" />
