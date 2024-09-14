@@ -11,12 +11,11 @@ const Knowledge = () => {
       <>
       <Navbar />
     <section className="knowledge-section">
-        <img src={knowledgeImg} alt="img" className="img" />
     <div className="knowledge-container">
         <h3>Knowledge</h3>
         </div>
-        <div className="text-box-container">
-        <div className="text-box">
+        <div className="text-box-container1">
+        <div className="text-box1">
           <p>
           <span className="title">Welcome To Our Dental Clinic Knowledge</span>
 
