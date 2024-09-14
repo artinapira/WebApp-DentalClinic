@@ -1,3 +1,7 @@
+
+.first-box{
+  align-items: center;
+}
 .marketing-section {
   text-align: center; 
   margin-bottom: 70px;
@@ -155,7 +159,9 @@ p .title {
 padding: 160px ; 
 margin-top: -10px; 
 text-align: center; 
+margin-left: 80px;
 margin-right: 43%;
+align-items: center;
 }
 
 .main-container1,.main-container2, .main-container3, .main-container4{
