@@ -104,7 +104,7 @@ const EditMedicalRecord = () => {
               <div className="singleitemdiv">
                 <button onClick={showModal}>
                   <AiFillEdit />
-                  Edit profile
+                  Edit 
                 </button>
               </div>
               <Modal

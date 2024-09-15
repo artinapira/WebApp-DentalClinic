@@ -255,7 +255,7 @@ const PatientProfile = () => {
                       name="ora"
                       value={appointmentData.ora}
                       onChange={(e) => setAppointmentData({ ...appointmentData, ora: e.target.value })}
-                      type="time"
+                      type="text"
                     />
                     <label>Issue</label>
                     <input
