@@ -8,6 +8,7 @@ using WebApp_DentalClinic.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 // Retrieve connection string from appsettings.json
 string connectionString = builder.Configuration.GetConnectionString("DentalClinicDatabase");
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -37,7 +38,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAllOrigin",
         builder =>
         {
-            builder.WithOrigins("https://localhost:3000/") // Your frontend URL
+            builder.WithOrigins("https://localhost:3000") // Your frontend URL
                    .AllowAnyHeader()
                    .AllowAnyMethod()
                    .AllowCredentials();
