@@ -12,7 +12,7 @@ using WebApp_DentalClinic;
 namespace WebApp_DentalClinic.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240915181700_InitialCreate")]
+    [Migration("20240916093945_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
