@@ -8,6 +8,7 @@ using WebApp_DentalClinic.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 // Retrieve connection string from appsettings.json
 string connectionString = builder.Configuration.GetConnectionString("DentalClinicDatabase");
 builder.Services.AddDbContext<AppDbContext>(options =>
