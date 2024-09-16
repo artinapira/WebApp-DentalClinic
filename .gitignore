@@ -362,5 +362,6 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 # Ignore appsettings.Development.json in dental-api folder
+WebApp-DentalClinic/appsettings.json
 WebApp-DentalClinic/appsettings.Development.json
 
