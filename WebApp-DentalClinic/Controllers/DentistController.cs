@@ -51,7 +51,7 @@ namespace WebApp_DentalClinic.Controllers
 
         [Authorize(Roles = "Dentist,Admin")]
         [HttpPut("{id}")]
-        public async Task<ActionResult<List<Dentist>>> UpdateDentist(int id, DentistVM mjeku)
+        public async Task<ActionResult<Dentist>> UpdateDentist(int id, DentistVM mjeku)
         {
 
             var result = await _dentistServices.UpdateDentist(id, new Dentist

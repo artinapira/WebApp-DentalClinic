@@ -40,7 +40,6 @@ namespace WebApp_DentalClinic.Services
             {
                 _prescription.Diagnoza = prescription.Diagnoza;
                 _prescription.Medicina = prescription.Medicina;
-                _prescription.PatientId = prescription.PatientId;
 
                 _context.SaveChanges();
             }

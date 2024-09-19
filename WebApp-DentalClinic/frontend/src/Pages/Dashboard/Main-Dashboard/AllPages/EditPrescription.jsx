@@ -64,9 +64,8 @@ const EditPrescription = () => {
   }, [dispatch, id, token1]);
 
   const [formData, setFormData] = useState({
-    diagnoza: prescriptions?.diagnoza || "",
-    medicina: prescriptions?.medicina || "",
-    patientId: prescriptions?.patientId || "",
+    diagnoza: prescriptions?.diagnoza || '',
+    medicina: prescriptions?.medicina || '',
   });
 
   const handleFormChange = (e) => {
@@ -80,7 +79,14 @@ const EditPrescription = () => {
     handleOk();
   };
 
-
+  useEffect(() => {
+    if (prescriptions) {
+      setFormData({
+        diagnoza: prescriptions.diagnoza,
+        medicina: prescriptions.medicina,
+      });
+    }
+  }, [prescriptions]);
 
   return (
     <>
@@ -99,10 +105,6 @@ const EditPrescription = () => {
               <div className="singleitemdiv">
                 <GiMedicines className="singledivicons" />
                 <p>{formData.medicina}</p>
-              </div>
-              <div className="singleitemdiv">
-                <BsPersonCircle className="singledivicons" />
-                <p>{formData.patientId}</p>
               </div>
               <div className="singleitemdiv">
                 <button onClick={showModal}>
@@ -143,15 +145,6 @@ const EditPrescription = () => {
                     onChange={handleFormChange}
                     type="text"
                     placeholder="Medicine"
-                  />
-                  <label htmlFor="patientId">Patient Id</label>
-                  <input
-                    name="patientId"
-                    value={formData.patientId}
-                    onChange={handleFormChange}
-                    type="number"
-
-                    placeholder="Patient ID"
                   />
                 </form>
               </Modal>

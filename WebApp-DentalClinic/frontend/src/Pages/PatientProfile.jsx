@@ -8,9 +8,9 @@ import { FaMoneyBillWave, FaMapMarkedAlt, FaBirthdayCake } from "react-icons/fa"
 import { AiOutlineUser, AiOutlineGlobal } from 'react-icons/ai';
 import { GiTooth } from 'react-icons/gi';
 import { useDispatch, useSelector } from "react-redux";
-import { Button, message, Modal, Table } from "antd";
+import { Button, message, Modal, Table, Select } from "antd";
 import { GetPatient, UpdatePatient } from "../redux/auth/action";
-import { GetAllMedicalRecord, GetAllPrescription, GetAllPatientNote, TerminetAdd } from '../redux/Datas/action';
+import { GetAllMedicalRecord, GetAllPrescription, GetAllPatientNote, TerminetAdd, GetAllDentists } from '../redux/Datas/action';
 import image from "../Assets/person.png";
 import Navbar from '../Components/Nav/Navbar';
 
@@ -26,12 +26,21 @@ const PatientProfile = () => {
     dataT: "",
     ora: "",
     ceshtja: "",
+    dentistId: "",
   });
 
   const dispatch = useDispatch();
   const patient = useSelector((state) => state.auth.data.user1);
+  console.log('Patient ',patient);
   const { token1 } = useSelector((store) => store.auth.data);
   const loggedInPatientId = patient?.patientId;
+  const dentists = useSelector((state) => state.data.dentists || []);  // Assuming dentists will be stored in state.data.dentists
+
+  useEffect(() => {
+    if (token1) {
+      dispatch(GetAllDentists(token1));  // Fetch all dentists on load
+    }
+  }, [dispatch, token1]);
 
   const medicalRecords = useSelector((state) => state.data.medicalrecords["$values"] || []);
   const prescriptions = useSelector((state) => state.data.prescriptions["$values"] || []);
@@ -90,12 +99,13 @@ const PatientProfile = () => {
   const handleCancelAppointment = () => setIsAppointmentVisible(false);
 
   const handleAppointmentSubmit = () => {
-    const { dataT, ora, ceshtja } = appointmentData;
+    const { dataT, ora, ceshtja, dentistId } = appointmentData;
     const requestBody = {
       dataT,
       ora,
       ceshtja,
-      pacientiId: loggedInPatientId,
+      dentistId,
+      patientId: loggedInPatientId,
     };
 
     dispatch(TerminetAdd(requestBody, token1));
@@ -265,6 +275,19 @@ const PatientProfile = () => {
                       type="text"
                       placeholder="Issue"
                     />
+                    <label>Dentist</label>
+                    <Select
+                    value={appointmentData.dentistId}
+                    onChange={(value) => setAppointmentData({ ...appointmentData, dentistId: value })}
+                    placeholder="Select Dentist"
+                    style={{ width: '100%' }}
+                    >
+                      {dentists.map((dentist) => (
+                      <Select.Option key={dentist.dentistId} value={dentist.dentistId}>
+                      {dentist.emriMbiemri} {/* Assuming dentist name is emriMbiemri */}
+                      </Select.Option>
+                      ))}
+                    </Select>
                   </form>
                 </Modal>
                 </div>

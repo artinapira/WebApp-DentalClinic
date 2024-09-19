@@ -223,7 +223,7 @@ export default function authReducer(state = initialState, { type, payload }) {
                     ...state,
                     data: {
                         ...state.data,
-                        patient: payload
+                        user1: payload
                     }
                 }
             case types.EDIT_TERMINET_SUCCESS:

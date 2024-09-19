@@ -40,6 +40,7 @@ import Prescription from './Pages/Dashboard/Main-Dashboard/AllPages/GlobalFiles/
 import Marketing from './Pages/Marketing';
 import Knowledge from './Pages/Knowledge';
 import DentistProfile from './Pages/Dashboard/Main-Dashboard/AllPages/Dentist/DentistProfile';
+import Appointments from './Pages/Dashboard/Main-Dashboard/AllPages/Dentist/checkappointments';
 
 
 
@@ -75,6 +76,7 @@ function App() {
                 <Route path="/Marketing" element={<Marketing/>}/>
                 <Route path="/Knowledge" element={<Knowledge/>}/>
                 <Route path="/DentistProfile" element={<DentistProfile/>}/>
+                <Route path="/checkappointment" element={<Appointments/>}/>
                 <Route path="/Add_Dentist" element={<AddDentist/>}/>
                 <Route path="/Add_Admin" element={<AddAdmin />} />
                 <Route path="/Add_Patient" element={<AddPatient />} />

@@ -8,8 +8,8 @@
 
         public string Ceshtja { get; set; } = null!;
 
-        public int StafiId { get; set; }
+        public int DentistId { get; set; }
 
-        public int PacientiId { get; set; }
+        public int PatientId { get; set; }
     }
 }

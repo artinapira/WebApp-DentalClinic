@@ -37,7 +37,6 @@ namespace WebApp_DentalClinic.Services
             if (_patientNote != null)
             {
                 _patientNote.Pershkrimi = patientNote.Pershkrimi;
-                _patientNote.PatientId = patientNote.PatientId;
 
                 _context.SaveChanges();
             }

@@ -33,12 +33,14 @@ const EditMedicalRecord = () => {
     }
   }, [dispatch, id, token1]);
 
+  console.log('medical record pershkrimi ',medicalrecords.pershkrimi);
+
   // Define formData state, initialized with an empty object if data is undefined
   const [formData, setFormData] = useState({
-    pershkrimi: medicalrecords?.pershkrimi || "",
-    simptomat: medicalrecords?.simptomat || "",
-    diagnoza: medicalrecords?.diagnoza || "",
-    rezultati: medicalrecords?.rezultati || "",
+    pershkrimi: medicalrecords?.pershkrimi || '',
+    simptomat: medicalrecords?.simptomat || '',
+    diagnoza: medicalrecords?.diagnoza || '',
+    rezultati: medicalrecords?.rezultati || '',
   });
 
   const [open, setOpen] = useState(false);
@@ -74,6 +76,16 @@ const EditMedicalRecord = () => {
     success("Updated");
     handleOk();
   };
+  useEffect(() => {
+    if (medicalrecords) {
+      setFormData({
+        pershkrimi: medicalrecords.pershkrimi,
+        simptomat: medicalrecords.simptomat,
+        diagnoza: medicalrecords.diagnoza,
+        rezultati: medicalrecords.rezultati,
+      });
+    }
+  }, [medicalrecords]);
 
 
   return (

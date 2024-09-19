@@ -31,23 +31,23 @@ namespace WebApp_DentalClinic.Controllers
         }
 
         [HttpGet("get-Department-by-id/{id}")]
-        public IActionResult GetDepartmentById(int departmentId)
+        public IActionResult GetDepartmentById(int id)
         {
-            var departmens = _departmentService.GetDepartmentById(departmentId);
+            var departmens = _departmentService.GetDepartmentById(id);
             return Ok(departmens);
         }
 
         [HttpPut("update-department-by-id/{id}")]
-        public IActionResult UpdateDepartmentById(int departmentId, [FromBody] DepartmentVM department)
+        public IActionResult UpdateDepartmentById(int id, [FromBody] DepartmentVM department)
         {
-            var updatedDepartment = _departmentService.UpdateDepartmentById(departmentId, department);
+            var updatedDepartment = _departmentService.UpdateDepartmentById(id, department);
             return Ok(updatedDepartment);
         }
 
         [HttpDelete("delete-department-by-id/{id}")]
-        public IActionResult DeleteDepartmentById(int departmentId)
+        public IActionResult DeleteDepartmentById(int id)
         {
-            _departmentService.DeleteDepartmentById(departmentId);
+            _departmentService.DeleteDepartmentById(id);
             return Ok();
         }
     }

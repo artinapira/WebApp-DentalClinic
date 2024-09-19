@@ -62,8 +62,7 @@ const EditPatientNote = () => {
 
 
   const [formData, setFormData] = useState({
-    pershkrimi: patientnotes?.pershkrimi,
-    patientId: patientnotes?.patientId
+    pershkrimi: patientnotes?.pershkrimi || '',
   });
 
   const handleFormChange = (e) => {
@@ -77,6 +76,13 @@ const EditPatientNote = () => {
     handleOk();
   };
 
+  useEffect(() => {
+    if (patientnotes) {
+      setFormData({
+        pershkrimi: patientnotes.pershkrimi,
+      });
+    }
+  }, [patientnotes]);
 
 
   return (
@@ -92,10 +98,6 @@ const EditPatientNote = () => {
               <div className="singleitemdiv">
                 <BsLayoutTextWindow className="singledivicons" />
                 <p>{formData.pershkrimi}</p>
-              </div>
-              <div className="singleitemdiv">
-                <BsPersonCircle className="singledivicons" />
-                <p>{formData.patientId}</p>
               </div>
               <div className="singleitemdiv">
                 <button onClick={showModal}>
@@ -128,15 +130,6 @@ const EditPatientNote = () => {
                     onChange={handleFormChange}
                     type="text"
                     placeholder="Description"
-                  />
-                  <label htmlFor="patientId">Patient Id</label>
-                  <input
-                    name="patientId"
-                    value={formData.patientId}
-                    onChange={handleFormChange}
-                    type="number"
-
-                    placeholder="Patient ID"
                   />
                 </form>
               </Modal>

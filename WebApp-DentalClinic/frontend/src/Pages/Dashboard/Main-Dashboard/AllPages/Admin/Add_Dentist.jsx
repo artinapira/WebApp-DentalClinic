@@ -7,12 +7,16 @@ import "react-toastify/dist/ReactToastify.css";
 import dentist from "../../../../../Assets/dentist.png";
 import { Navigate } from "react-router-dom";
 import Sidebar from "../GlobalFiles/Sidebar";
+import { GetAllDepartment } from "../../../../../redux/Datas/action";
 
 const notify = (text) => toast(text);
 
 const AddDentist = () => {
 
   const dispatch = useDispatch();
+  const { token1 } = useSelector((store) => store.auth.data);
+  const departments = useSelector((store) => store.data.departments["$values"] || []);
+  console.log('Departments: ',departments);
 
   const [loading, setLoading] = useState(false);
 
@@ -24,13 +28,18 @@ const AddDentist = () => {
     username: "",
     email: "",
     password: "",
-    departmentId: "A-",
+    departmentId: "",
     
     };
 
     const [DentistValue, setDentistValue] = useState(initData);
 
 
+    useEffect(() => {
+      if (token1) {
+        dispatch(GetAllDepartment(token1));
+      }
+    }, [dispatch, token1]);
 
 
 
@@ -160,16 +169,21 @@ const AddDentist = () => {
                 </div>
               </div>
               <div>
-                <label>Department ID</label>
+                <label>Select Department</label>
                 <div className="inputdiv">
-                  <input
-                    type="number"
-                    placeholder="departmentId"
+                  <select
                     name="departmentId"
                     value={DentistValue.departmentId}
                     onChange={HandleDentistChange}
                     required
-                  />
+                  >
+                    <option value="">Select a Department</option>
+                    {departments.map((department) => (
+                      <option key={department.departmentId} value={department.departmentId}>
+                        {department.emri} {/* Display dentist name */}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
               

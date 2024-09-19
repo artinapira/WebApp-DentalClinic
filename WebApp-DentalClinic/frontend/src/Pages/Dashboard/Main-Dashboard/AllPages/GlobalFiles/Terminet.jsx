@@ -13,6 +13,7 @@ const Terminet = () => {
     {title:"Date",dataIndex:"dataT",key:"dataT"},
     { title: "Time", dataIndex: "ora", key: "ora" },
     { title: "Symptoms", dataIndex: "ceshtja", key: "ceshtja" },
+    { title: "Dentist-ID", dataIndex: "dentistId", key: "dentistId" },
     { title: "Patient-ID", dataIndex: "patientId", key: "patientId" },
     {
       title: "Actions", key: "action", render: (record) => {

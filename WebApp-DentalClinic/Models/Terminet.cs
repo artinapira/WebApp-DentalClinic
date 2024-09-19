@@ -10,9 +10,13 @@
 
         public string Ceshtja { get; set; } = null!;
 
+        public int DentistId { get; set; }
+
         public int PatientId { get; set; }
 
         public virtual Patient Patient { get; set; } = null!;
+
+        public virtual Dentist Dentist { get; set; } = null!;
 
     }
 }

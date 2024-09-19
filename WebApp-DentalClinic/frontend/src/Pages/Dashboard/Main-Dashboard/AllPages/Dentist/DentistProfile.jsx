@@ -17,6 +17,7 @@ import Sidebar from "../GlobalFiles/Sidebar";
 const DentistProfile = () => {
   const dispatch = useDispatch();
   const dentist = useSelector((state) => state.auth.data.dentist);
+  console.log('Dentist: ',dentist);
   const { token1 } = useSelector((store) => store.auth.data);
   
   // Add a loading state to handle undefined dentist
