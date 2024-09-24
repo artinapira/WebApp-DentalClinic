@@ -44,5 +44,18 @@ namespace WebApp_DentalClinic
 
         public DbSet<Kontakti> Kontaktis { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // Add the indexing here
+            modelBuilder.Entity<Patient>()
+                .HasIndex(p => p.EmriMbiemri);
+
+            modelBuilder.Entity<Dentist>()
+        .HasIndex(d => d.EmriMbiemri);
+
+            // Any other model configuration
+            base.OnModelCreating(modelBuilder);
+        }
+
     }
 }

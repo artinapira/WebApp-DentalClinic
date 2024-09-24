@@ -82,7 +82,7 @@ namespace WebApp_DentalClinic.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<List<Dentist>>> Login(Login request)
+        public async Task<ActionResult<ServiceResponse<LoginResponse>>> Login(Login request)
         {
             var response = await _dentistServices.Login(request.Email, request.Password);
             if (!(bool)response.Success)
@@ -91,6 +91,18 @@ namespace WebApp_DentalClinic.Controllers
             }
             return Ok(response);
         }
+
+        [HttpPost("refresh-token")]
+        public async Task<ActionResult<ServiceResponse<LoginResponse>>> RefreshToken([FromBody] string refreshToken)
+        {
+            var response = await _dentistServices.RefreshToken(refreshToken);
+            if (!(bool)response.Success)
+            {
+                return Unauthorized(response);
+            }
+            return Ok(response);
+        }
+
 
         [HttpPost]
         public async Task<ActionResult<List<Dentist>>> AddDentist(DentistVM mjeku)
@@ -113,6 +125,13 @@ namespace WebApp_DentalClinic.Controllers
                 return NotFound(result);
             }
             return Ok(result);
+        }
+
+        [HttpGet("search")]
+        public IActionResult SearchPatients(string name)
+        {
+            var patients = _dentistServices.SearchByName(name);
+            return Ok(patients);
         }
     }
 }

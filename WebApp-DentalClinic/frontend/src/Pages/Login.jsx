@@ -28,20 +28,25 @@ function Login() {
     e.preventDefault();
     try {
       const res = await dispatch(authLogin(form));
-      // Since token1 might not be immediately updated, check if it's retrieved from localStorage:
-      const storedToken = localStorage.getItem("token1");
-      console.log("Token from localStorage:", storedToken);
-      if (res.success && storedToken) {
+      
+      // Storing tokens
+      const accessToken = res.data.accessToken;
+      const refreshToken = res.data.refreshToken;
+      
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+  
+      if (res.success) {
         notify("Login Successful.");
         navigate("/Home");
       } else {
         notify("Wrong credentials, Please try again.");
       }
     } catch (error) {
-      console.error("Error during login:", error);
       notify("Error occurred, unable to Login.");
     }
   };
+  
   
   
   

@@ -2,11 +2,9 @@ import React, { useState } from 'react';
 import { Modal, Button, Input, notification } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { MedicalRecordAdd } from '../redux/Datas/action'; // Import your action creator
-import { useNavigate } from 'react-router-dom';
 
-const MedicalRecordModal = ({ patient, visible, onClose }) => { // Accept patient as a prop
+const MedicalRecordModal = ({ patient, visible, onClose, onAdded }) => { // Accept onAdded as a prop
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const authState = useSelector((state) => state.auth);
     const user1 = authState.data?.user1;
 
@@ -14,11 +12,6 @@ const MedicalRecordModal = ({ patient, visible, onClose }) => { // Accept patien
     const [symptoms, setSymptoms] = useState('');
     const [diagnosis, setDiagnosis] = useState('');
     const [result, setResult] = useState('');
-
-    // Debugging logs
-    console.log("Redux state:", authState);
-    console.log("User data from selector:", user1);
-    console.log("Selected patient:", patient); // Log the patient prop
 
     const handleSubmit = async () => {
         if (!patient?.patientId) {
@@ -43,8 +36,8 @@ const MedicalRecordModal = ({ patient, visible, onClose }) => { // Accept patien
                 message: 'Success',
                 description: 'Medical record added successfully.',
             });
+            onAdded(); // Call the onAdded callback to refetch data
             onClose(); // Close the modal
-            navigate('/Patients'); // Navigate to the Patients page
         } catch (error) {
             console.error('Error adding medical record:', error);
             notification.error({

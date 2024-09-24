@@ -36,6 +36,20 @@ export default function dataReducer(state = initialState, { type, payload }) {
                 patients: payload,
                 error: false,
             };
+        case 'PATIENTS_SEARCH_SUCCESS':
+            return { 
+                ...state,
+                loading: false, 
+                patients: payload, 
+                
+            };
+        case 'DENTISTS_SEARCH_SUCCESS':
+            return { 
+                ...state,
+                loading: false, 
+                dentists: payload, 
+                
+            };
         case types.GET_ANKESAT_SUCCESS:
             return {
                 ...state,

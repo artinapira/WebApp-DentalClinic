@@ -2,11 +2,9 @@ import React, { useState } from 'react';
 import { Modal, Button, Input, notification } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { PatientNoteAdd } from '../redux/Datas/action'; // Import your action creator
-import { useNavigate } from 'react-router-dom';
 
-const PatientNoteModal = ({ patient, visible, onClose }) => {
+const PatientNoteModal = ({ patient, visible, onClose, onAdded }) => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const { data: { user1 } } = useSelector((state) => state.auth);
     const [note, setNote] = useState('');
 
@@ -32,8 +30,8 @@ const PatientNoteModal = ({ patient, visible, onClose }) => {
                 message: 'Success',
                 description: 'Patient note added successfully.',
             });
+            onAdded(); // Call the onAdded callback to refetch data
             onClose(); // Close the modal
-            navigate('/Patients'); // Navigate to the Patients page
         } catch (error) {
             console.error('Error adding patient note:', error);
             notification.error({

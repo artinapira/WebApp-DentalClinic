@@ -1,37 +1,38 @@
 import * as types from './types';
-import axios from "axios";
+import axios from "../../utils/axios";
 
 
 export const AdminLogin = (data) => async (dispatch) => {
-    try {
-      dispatch({ type: types.LOGIN_ADMIN_REQUEST });
-      const res = await axios.post(
-        "https://localhost:7157/api/Admin/login",
-        data
-      );
-      
-      dispatch({
-        type: types.LOGIN_ADMIN_SUCCESS,
-        payload: {
-          message: res.data.message,
-          success:res.data.success,
-          token1: res.data.data,
-        },
-      });
-      return res.data;
-    } catch (error) { 
+  dispatch({ type: types.LOGIN_ADMIN_REQUEST });
+  try {
+    const res = await axios.post("https://localhost:7157/api/Admin/login", data);
 
-      dispatch({
-      
-        type: types.LOGIN_ADMIN_ERROR,
-        payload: {
-          message: error.response.data.message,
-        
-        },
-      });
-      return error.response.data
-    }
+    const { accessToken, refreshToken } = res.data.data;
+
+    dispatch({
+      type: types.LOGIN_ADMIN_SUCCESS,
+      payload: {
+        message: res.data.message,
+        success: res.data.success,
+        token1: accessToken,
+      },
+    });
+    localStorage.setItem('accessToken', accessToken);
+
+    localStorage.setItem('refreshToken', refreshToken);  // Store refresh token
+
+    return { accessToken, refreshToken, message: res.data.message };
+    } catch (error) {
+    dispatch({
+      type: types.LOGIN_ADMIN_ERROR,
+      payload: {
+        message: error.response.data.message,
+      },
+    });
+    return { message: error.response.data.message };
+  }
 };
+
 
 export const UpdateAdmin = (data, id,token) => async (dispatch) => {
   try {
@@ -109,35 +110,36 @@ export const GetAdmin = (id,token) => async (dispatch) => {
 
 
 export const DentistLogin = (data) => async (dispatch) => {
+  dispatch({ type: types.LOGIN_DENTIST_REQUEST });
   try {
-    dispatch({ type: types.LOGIN_DENTIST_REQUEST });
-    const res = await axios.post(
-      "https://localhost:7157/api/Dentist/login",
-      data
-    );
-    
+    const res = await axios.post("https://localhost:7157/api/Dentist/login", data);
+
+    const { accessToken, refreshToken } = res.data.data;
+
     dispatch({
       type: types.LOGIN_DENTIST_SUCCESS,
       payload: {
         message: res.data.message,
-        success:res.data.success,
-        token1: res.data.data,
+        success: res.data.success,
+        token1: accessToken,
       },
     });
-    return res.data;
-  } catch (error) { 
+    localStorage.setItem('accessToken', accessToken);
 
+    localStorage.setItem('refreshToken', refreshToken);  // Store refresh token
+
+    return res.data;
+  } catch (error) {
     dispatch({
-    
       type: types.LOGIN_DENTIST_ERROR,
       payload: {
         message: error.response.data.message,
-      
       },
     });
-    return error.response.data
+    return error.response.data;
   }
 };
+
 
 
 export const DentistRegister = (data) => async (dispatch) => {
@@ -187,13 +189,17 @@ export const PatientRegister = (data,token) => async (dispatch) => {
 
 export const authLogout = () => async (dispatch) => {
   try {
-    dispatch({
-      type: types.AUTH_LOGOUT,
-    });
+    dispatch({ type: types.AUTH_LOGOUT });
+    
+    // Clear tokens from localStorage
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    
   } catch (error) {
-    ;
+    console.error('Logout error:', error);
   }
 };
+
 
 export const UpdatePatient = (data, id,token) => async (dispatch) => {
   try {
@@ -345,16 +351,26 @@ export const authLogin = (data) => async (dispatch) => {
   dispatch({ type: types.LOGIN_USER_REQUEST });
   try {
     const res = await axios.post("https://localhost:7157/api/Patient/login", data);
-    console.log('API Response:', res.data);  // Check the response structure
-    
+
+    const { accessToken, refreshToken } = res.data.data;  // Expecting both tokens from the response
+
+    // Store the access token in Redux (or React state)
     dispatch({
       type: types.LOGIN_USER_SUCCESS,
       payload: {
         message: res.data.message,
         success: res.data.success,
-        token1: res.data.data,  // Ensure this is where the token comes from
+        token1: accessToken,  // Storing access token in Redux
       },
     });
+
+
+    localStorage.setItem('accessToken', accessToken);
+    // Store the refresh token in localStorage
+    localStorage.setItem('refreshToken', refreshToken); // Storing refresh token in localStorage
+    console.log("Login response:", res.data); // Check this log
+
+
     return res.data;
   } catch (error) {
     dispatch({
@@ -366,6 +382,7 @@ export const authLogin = (data) => async (dispatch) => {
     return error.response ? error.response.data : { message: "Unexpected error occurred" };
   }
 };
+
 
 
 export const GetAnkesa = (id,token) => async (dispatch) => {

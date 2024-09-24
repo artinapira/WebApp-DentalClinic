@@ -59,7 +59,7 @@ console.log('Data of admin home',admin);
                 <div className='row'>
                     <div className='col-md-8 col-lg-6'>
                         <h5>Adding Care to your Life.</h5>
-                        <h2>Protecting and Taking Care To Of Your Teeth</h2>
+                        <h2>Protecting and Taking Care Of Your Teeth</h2>
                         <button><a href='#'>Read More</a></button>
                     </div>
                     <div className='col-lg-4 col-md-6'>

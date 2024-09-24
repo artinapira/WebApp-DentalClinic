@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Modal } from "antd";
+import { Button } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import {
   GetAllMedicalRecord,
@@ -10,6 +10,7 @@ import MedicalRecordModal from "./AddMedicalRecord";
 import PrescriptionModal from "./AddPrescription";
 import PatientNoteModal from "./AddPatientNote";
 import "./CSS/PatientModal.css";
+
 const PatientModal = ({ patient, onClose }) => {
   const dispatch = useDispatch();
   const token1 = useSelector((state) => state.auth.data.token1);
@@ -17,7 +18,6 @@ const PatientModal = ({ patient, onClose }) => {
   const [isPrescriptionVisible, setIsPrescriptionVisible] = useState(false);
   const [isPatientNoteVisible, setIsPatientNoteVisible] = useState(false);
 
-  const patientState = useSelector((state) => state.data.patient);
   const medicalrecords = useSelector(
     (state) => state.data.medicalrecords["$values"] || []
   );
@@ -27,41 +27,29 @@ const PatientModal = ({ patient, onClose }) => {
   const patientnotes = useSelector(
     (state) => state.data.patientnotes["$values"] || []
   );
-  const loading = useSelector((state) => state.data.loading);
   const error = useSelector((state) => state.data.error);
+
+  const refetchData = () => {
+    dispatch(GetAllMedicalRecord(token1));
+    dispatch(GetAllPrescription(token1));
+    dispatch(GetAllPatientNote(token1));
+  };
 
   useEffect(() => {
     if (patient) {
-      dispatch(GetAllMedicalRecord(token1));
-      dispatch(GetAllPrescription(token1));
-      dispatch(GetAllPatientNote(token1));
+      refetchData();
     }
   }, [dispatch, patient, token1]);
 
-  console.log("medical: ", medicalrecords);
-  console.log("prescription: ", prescriptions);
-  console.log("note: ", patientnotes);
-
-  // Filter the medical records for the specific patient
-  const filteredMedicalRecords = Array.isArray(medicalrecords)
-    ? medicalrecords.filter((record) => record.patientId === patient.patientId)
-    : [];
-  const filteredPrescriptions = Array.isArray(prescriptions)
-    ? prescriptions.filter(
-        (prescription) => prescription.patientId === patient.patientId
-      )
-    : [];
-  const filteredPatientNotes = Array.isArray(patientnotes)
-    ? patientnotes.filter((note) => note.patientId === patient.patientId)
-    : [];
-
-  console.log("filteredMedicalRecords: ", filteredMedicalRecords);
-  console.log("filteredPrescriptions: ", filteredPrescriptions);
-  console.log("filteredPatientNotes: ", filteredPatientNotes);
-
-  const openMedicalRecordModal = () => setIsMedicalRecordVisible(true);
-  const openPrescriptionModal = () => setIsPrescriptionVisible(true);
-  const openPatientNoteModal = () => setIsPatientNoteVisible(true);
+  const filteredMedicalRecords = medicalrecords.filter(
+    (record) => record.patientId === patient.patientId
+  );
+  const filteredPrescriptions = prescriptions.filter(
+    (prescription) => prescription.patientId === patient.patientId
+  );
+  const filteredPatientNotes = patientnotes.filter(
+    (note) => note.patientId === patient.patientId
+  );
 
   if (!patient) {
     return <p>No patient data available.</p>;
@@ -81,21 +69,11 @@ const PatientModal = ({ patient, onClose }) => {
 
       <div className="patient-modal-body">
         <div className="patient-details">
-          <p>
-            <strong>Patient ID:</strong> {patient.patientId}
-          </p>
-          <p>
-            <strong>Name:</strong> {patient.emriMbiemri}
-          </p>
-          <p>
-            <strong>Birth Date:</strong> {patient.dataLindjes}
-          </p>
-          <p>
-            <strong>Gender:</strong> {patient.gjinia}
-          </p>
-          <p>
-            <strong>Email:</strong> {patient.email}
-          </p>
+          <p><strong>Patient ID:</strong> {patient.patientId}</p>
+          <p><strong>Name:</strong> {patient.emriMbiemri}</p>
+          <p><strong>Birth Date:</strong> {patient.dataLindjes}</p>
+          <p><strong>Gender:</strong> {patient.gjinia}</p>
+          <p><strong>Email:</strong> {patient.email}</p>
         </div>
 
         <div className="data-sections">
@@ -105,21 +83,11 @@ const PatientModal = ({ patient, onClose }) => {
               {filteredMedicalRecords.length > 0 ? (
                 filteredMedicalRecords.map((record) => (
                   <div key={record.id}>
-                    <p>
-                      <strong>Record ID:</strong> {record.medicalRecordId}
-                    </p>
-                    <p>
-                      <strong>Description:</strong> {record.pershkrimi}
-                    </p>
-                    <p>
-                      <strong>Symptoms:</strong> {record.simptomat}
-                    </p>
-                    <p>
-                      <strong>Diagnosis:</strong> {record.diagnoza}
-                    </p>
-                    <p>
-                      <strong>Results:</strong> {record.rezultati}
-                    </p>
+                    <p><strong>Record ID:</strong> {record.medicalRecordId}</p>
+                    <p><strong>Description:</strong> {record.pershkrimi}</p>
+                    <p><strong>Symptoms:</strong> {record.simptomat}</p>
+                    <p><strong>Diagnosis:</strong> {record.diagnoza}</p>
+                    <p><strong>Results:</strong> {record.rezultati}</p>
                   </div>
                 ))
               ) : (
@@ -140,16 +108,9 @@ const PatientModal = ({ patient, onClose }) => {
               {filteredPrescriptions.length > 0 ? (
                 filteredPrescriptions.map((prescription) => (
                   <div key={prescription.prescriptionId}>
-                    <p>
-                      <strong>Prescription ID:</strong>{" "}
-                      {prescription.prescriptionId}
-                    </p>
-                    <p>
-                      <strong>Diagnosis:</strong> {prescription.diagnoza}
-                    </p>
-                    <p>
-                      <strong>Medicine:</strong> {prescription.medicina}
-                    </p>
+                    <p><strong>Prescription ID:</strong> {prescription.prescriptionId}</p>
+                    <p><strong>Diagnosis:</strong> {prescription.diagnoza}</p>
+                    <p><strong>Medicine:</strong> {prescription.medicina}</p>
                   </div>
                 ))
               ) : (
@@ -170,12 +131,8 @@ const PatientModal = ({ patient, onClose }) => {
               {filteredPatientNotes.length > 0 ? (
                 filteredPatientNotes.map((note) => (
                   <div key={note.patientnoteId}>
-                    <p>
-                      <strong>Note ID:</strong> {note.patientNoteId}
-                    </p>
-                    <p>
-                      <strong>Note:</strong> {note.pershkrimi}
-                    </p>
+                    <p><strong>Note ID:</strong> {note.patientNoteId}</p>
+                    <p><strong>Note:</strong> {note.pershkrimi}</p>
                   </div>
                 ))
               ) : (
@@ -197,16 +154,19 @@ const PatientModal = ({ patient, onClose }) => {
         patient={patient}
         visible={isMedicalRecordVisible}
         onClose={() => setIsMedicalRecordVisible(false)}
+        onAdded={refetchData} // Pass the refetch function
       />
       <PrescriptionModal
         patient={patient}
         visible={isPrescriptionVisible}
         onClose={() => setIsPrescriptionVisible(false)}
+        onAdded={refetchData} // Pass the refetch function
       />
       <PatientNoteModal
         patient={patient}
         visible={isPatientNoteVisible}
         onClose={() => setIsPatientNoteVisible(false)}
+        onAdded={refetchData} // Pass the refetch function
       />
     </div>
   );

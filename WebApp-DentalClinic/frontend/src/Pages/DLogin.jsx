@@ -45,7 +45,7 @@ const DLogin = () => {
       if (data.email.includes("admin")) {
         dispatch(AdminLogin(data)).then((res) => {
           setLoading(false);
-          if (res.message === "Logged in successfully") {
+          if (res.message === "Login successful") {
             notify("Login Successful");
             return navigate("/Home");
           } else if (res.message === "Password incorrect") {
@@ -71,6 +71,9 @@ const DLogin = () => {
       }
     }
   };
+
+  
+  
 
   const placementChange = (e) => {
     setPlacement(e.target.value);

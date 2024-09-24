@@ -2,6 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using WebApp_DentalClinic.Models;
 using WebApp_DentalClinic.ViewModels;
 
@@ -91,40 +92,71 @@ namespace WebApp_DentalClinic.Services
 
 
         }
-
-        public async Task<ServiceResponse<string>> Login(string email, string password)
+        public IEnumerable<Patient> SearchByName(string name)
         {
-            var response = new ServiceResponse<string>();
+            // If the name is empty or null, return all patients
+            if (string.IsNullOrEmpty(name))
+            {
+                return _context.Patients.ToList();
+            }
+
+            // Search patients by partial name match (case insensitive)
+            return _context.Patients
+                           .Where(p => p.EmriMbiemri.ToLower().Contains(name.ToLower()))
+                           .ToList();
+        }
+
+
+        public async Task<ServiceResponse<LoginResponse>> Login(string email, string password)
+        {
+            var response = new ServiceResponse<LoginResponse>();
             Authentication auth = new Authentication();
             var pacienti = await _context.Patients.FirstOrDefaultAsync(m => m.Email.ToLower().Equals(email.ToLower()));
+
             if (pacienti is null)
             {
                 response.Success = false;
-                response.Message = "pacienti not found";
+                response.Message = "Pacienti not found";
+                return response;
             }
-            else if (!auth.VerifyPasswordHash(password, pacienti.PasswordHash, pacienti.PasswordSalt))
+
+            if (!auth.VerifyPasswordHash(password, pacienti.PasswordHash, pacienti.PasswordSalt))
             {
                 response.Success = false;
                 response.Message = "Password incorrect";
+                return response;
             }
-            else
+
+            // Generate Access Token
+            string accessToken = CreateToken(pacienti);
+
+            // Generate Refresh Token
+            string refreshToken = CreateRefreshToken();
+            pacienti.RefreshToken = refreshToken;
+            pacienti.RefreshTokenExpiryTime = DateTime.Now.AddDays(1); 
+
+            await _context.SaveChangesAsync(); // Save the refresh token to the database
+
+            // Return both tokens to the client
+            response.Data = new LoginResponse
             {
-                response.Data = CreateToken(pacienti);
-                response.Success = true;
-                response.Message = "Login Successful.";
-            }
+                AccessToken = accessToken,
+                RefreshToken = refreshToken
+            };
+            response.Success = true;
+            response.Message = "Login successful";
+
             return response;
         }
 
+
         private string CreateToken(Patient pacienti)
         {
-
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, pacienti.PatientId.ToString()),
                 new Claim(ClaimTypes.Name, pacienti.EmriMbiemri),
                 new Claim(ClaimTypes.Role, "Patient")
-
             };
 
             var appSettingsToken = _configuration.GetSection("AppSettings:Token").Value;
@@ -139,7 +171,7 @@ namespace WebApp_DentalClinic.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(1),
+                Expires = DateTime.Now.AddMinutes(15), // Short-lived access token (15 min)
                 SigningCredentials = creds
             };
 
@@ -147,8 +179,51 @@ namespace WebApp_DentalClinic.Services
             SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(token);
-
-
         }
+
+
+        private string CreateRefreshToken()
+        {
+            var randomNumber = new byte[64];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(randomNumber);
+                return Convert.ToBase64String(randomNumber);
+            }
+        }
+
+        public async Task<ServiceResponse<LoginResponse>> RefreshToken(string refreshToken)
+        {
+            var response = new ServiceResponse<LoginResponse>();
+
+            var pacienti = await _context.Patients.FirstOrDefaultAsync(p => p.RefreshToken == refreshToken);
+            if (pacienti == null || pacienti.RefreshTokenExpiryTime < DateTime.Now)
+            {
+                response.Success = false;
+                response.Message = "Invalid or expired refresh token";
+                return response;
+            }
+
+            // Generate a new access token
+            string newAccessToken = CreateToken(pacienti);
+
+            // Optionally, generate a new refresh token (for better security)
+            string newRefreshToken = CreateRefreshToken();
+            pacienti.RefreshToken = newRefreshToken;
+            pacienti.RefreshTokenExpiryTime = DateTime.Now.AddDays(7); // Renew for another 7 days
+
+            await _context.SaveChangesAsync(); // Update database
+
+            response.Data = new LoginResponse
+            {
+                AccessToken = newAccessToken,
+                RefreshToken = newRefreshToken
+            };
+            response.Success = true;
+            response.Message = "Token refreshed successfully";
+
+            return response;
+        }
+
     }
 }

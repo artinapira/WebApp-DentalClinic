@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApp_DentalClinic;
 
@@ -11,9 +12,11 @@ using WebApp_DentalClinic;
 namespace WebApp_DentalClinic.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240922160604_refreshtoken")]
+    partial class refreshtoken
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -215,7 +218,7 @@ namespace WebApp_DentalClinic.Migrations
 
                     b.Property<string>("EmriMbiemri")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<TimeOnly?>("Orari")
                         .HasColumnType("time");
@@ -245,8 +248,6 @@ namespace WebApp_DentalClinic.Migrations
                     b.HasKey("DentistId");
 
                     b.HasIndex("DepartmentId");
-
-                    b.HasIndex("EmriMbiemri");
 
                     b.ToTable("Dentists");
                 });
@@ -417,7 +418,7 @@ namespace WebApp_DentalClinic.Migrations
 
                     b.Property<string>("EmriMbiemri")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Gjinia")
                         .HasColumnType("nvarchar(max)");
@@ -442,8 +443,6 @@ namespace WebApp_DentalClinic.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("PatientId");
-
-                    b.HasIndex("EmriMbiemri");
 
                     b.ToTable("Patients");
                 });

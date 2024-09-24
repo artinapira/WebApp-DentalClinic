@@ -2,11 +2,9 @@ import React, { useState } from 'react';
 import { Modal, Button, Input, notification } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { PrescriptionAdd } from '../redux/Datas/action'; // Import your action creator
-import { useNavigate } from 'react-router-dom';
 
-const PrescriptionModal = ({ patient, visible, onClose }) => {
+const PrescriptionModal = ({ patient, visible, onClose, onAdded }) => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const { data: { user1 } } = useSelector((state) => state.auth);
     const [diagnosis, setDiagnosis] = useState('');
     const [medicine, setMedicine] = useState('');
@@ -34,8 +32,8 @@ const PrescriptionModal = ({ patient, visible, onClose }) => {
                 message: 'Success',
                 description: 'Prescription added successfully.',
             });
+            onAdded(); // Call the onAdded callback to refetch data
             onClose(); // Close the modal
-            navigate('/Patients'); // Navigate to the Patients page
         } catch (error) {
             console.error('Error adding prescription:', error);
             notification.error({

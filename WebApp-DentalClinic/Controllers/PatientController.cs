@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using WebApp_DentalClinic.Models;
 using WebApp_DentalClinic.Services;
@@ -13,10 +14,12 @@ namespace WebApp_DentalClinic.Controllers
     public class PatientController : ControllerBase
     {
         public PatientServices _patientServices;
+        private AppDbContext _context;
 
-        public PatientController(PatientServices patientServices)
+        public PatientController(AppDbContext context, PatientServices patientServices)
         {
             _patientServices = patientServices;
+            _context = context;
         }
 
         [HttpGet("PatientAll")]
@@ -83,7 +86,7 @@ namespace WebApp_DentalClinic.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<List<Patient>>> Login(Login request)
+        public async Task<ActionResult<ServiceResponse<LoginResponse>>> Login(Login request)
         {
             var response = await _patientServices.Login(request.Email, request.Password);
             if (!(bool)response.Success)
@@ -92,6 +95,18 @@ namespace WebApp_DentalClinic.Controllers
             }
             return Ok(response);
         }
+
+        [HttpPost("refresh-token")]
+        public async Task<ActionResult<ServiceResponse<LoginResponse>>> RefreshToken([FromBody] string refreshToken)
+        {
+            var response = await _patientServices.RefreshToken(refreshToken);
+            if (!(bool)response.Success)
+            {
+                return Unauthorized(response);
+            }
+            return Ok(response);
+        }
+
 
 
         [HttpPost("add-patient")]
@@ -113,5 +128,15 @@ namespace WebApp_DentalClinic.Controllers
                 , pacienti.Password);
             return Ok(result);
         }
+
+        [HttpGet("search")]
+        public IActionResult SearchPatients(string name)
+        {
+            var patients = _patientServices.SearchByName(name);
+            return Ok(patients);
+        }
+
+
+
     }
 }

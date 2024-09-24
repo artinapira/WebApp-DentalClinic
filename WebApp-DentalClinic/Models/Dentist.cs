@@ -19,6 +19,9 @@
         public byte[] PasswordHash { get; set; } = null!;
         public byte[] PasswordSalt { get; set; } = null!;
 
+        public string RefreshToken { get; set; } = null!;
+        public DateTime RefreshTokenExpiryTime { get; set; }
+
         public virtual Department Department { get; set; } = null!;
 
         public virtual ICollection<Terminet> Terminets { get; set; } = new List<Terminet>();

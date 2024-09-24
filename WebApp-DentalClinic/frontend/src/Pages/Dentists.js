@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../Components/Nav/Navbar';
 import { useDispatch, useSelector } from 'react-redux';
-import { GetAllDentists } from '../redux/Datas/action';
+import { GetAllDentists, searchDentistsByName } from '../redux/Datas/action';
 import DentistModal from './DentistModal';
 import { Table } from 'antd';
 import './CSS/dentists.css';
@@ -16,6 +16,23 @@ function Dentists() {
 
     console.log('dentistData: ',dentistData);
     const [selectedDentist, setSelectedDentist] = useState(null);
+
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const handleSearch = (e) => {
+        const searchValue = e.target.value;
+        setSearchTerm(searchValue);
+
+        if (token1) {
+            if (searchValue === '') {
+                // If search term is empty, fetch all patients
+                dispatch(GetAllDentists(token1));
+            } else {
+                // Otherwise, search for patients
+                dispatch(searchDentistsByName(token1, searchValue));
+            }
+        }
+    };
 
     useEffect(() => {
         if (token1) {
@@ -54,6 +71,12 @@ function Dentists() {
     return (
         <div>
             <Navbar />
+            <input
+                type="text"
+                placeholder="Search dentists by name..."
+                value={searchTerm}
+                onChange={handleSearch}  // Call handleSearch when typing
+            />
             <div className="background">
                 <h1>Dentists</h1>
                 {loading && <p>Loading...</p>}

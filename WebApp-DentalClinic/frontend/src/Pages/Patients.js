@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../Components/Nav/Navbar';
 import { useDispatch, useSelector } from 'react-redux';
-import { GetAllPatients } from '../redux/Datas/action';
+import { GetAllPatients, searchPatientsByName } from '../redux/Datas/action';
 import PatientModal from './PatientModal';
 import './CSS/Patients.css';
 
@@ -12,8 +12,27 @@ function Patients() {
     const loading = useSelector((state) => state.data.loading);
     const error = useSelector((state) => state.data.error);
     const [selectedPatient, setSelectedPatient] = useState(null);
+    const [searchTerm, setSearchTerm] = useState('');
+
     console.log('Token in patients', token1);
 
+    // Search handler
+    const handleSearch = (e) => {
+        const searchValue = e.target.value;
+        setSearchTerm(searchValue);
+
+        if (token1) {
+            if (searchValue === '') {
+                // If search term is empty, fetch all patients
+                dispatch(GetAllPatients(token1));
+            } else {
+                // Otherwise, search for patients
+                dispatch(searchPatientsByName(token1, searchValue));
+            }
+        }
+    };
+
+    // Fetch all patients initially
     useEffect(() => {
         if (token1) {
             dispatch(GetAllPatients(token1));
@@ -35,6 +54,12 @@ function Patients() {
     return (
         <div>
             <Navbar />
+            <input
+                type="text"
+                placeholder="Search patients by name..."
+                value={searchTerm}
+                onChange={handleSearch}  // Call handleSearch when typing
+            />
             <div className="background">
                 <h1>Patients</h1>
                 {loading && <p>Loading...</p>}

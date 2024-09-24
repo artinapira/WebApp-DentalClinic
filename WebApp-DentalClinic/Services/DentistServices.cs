@@ -2,6 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using WebApp_DentalClinic.Models;
 using WebApp_DentalClinic.ViewModels;
 
@@ -112,39 +113,80 @@ namespace WebApp_DentalClinic.Services
 
         }
 
-        public async Task<ServiceResponse<string>> Login(string email, string password)
+        public IEnumerable<Dentist> SearchByName(string name)
         {
-            var response = new ServiceResponse<string>();
+            // If the name is empty or null, return all patients
+            if (string.IsNullOrEmpty(name))
+            {
+                return _context.Dentists.ToList();
+            }
+
+            // Search patients by partial name match (case insensitive)
+            return _context.Dentists
+                           .Where(p => p.EmriMbiemri.ToLower().Contains(name.ToLower()))
+                           .ToList();
+        }
+
+        public async Task<ServiceResponse<LoginResponse>> Login(string email, string password)
+        {
+            var response = new ServiceResponse<LoginResponse>();
             Authentication auth = new Authentication();
             var mjeku = await _context.Dentists.FirstOrDefaultAsync(m => m.Email.ToLower().Equals(email.ToLower()));
+
             if (mjeku is null)
             {
                 response.Success = false;
                 response.Message = "Mjeku not found";
+                return response;
             }
-            else if (!auth.VerifyPasswordHash(password, mjeku.PasswordHash, mjeku.PasswordSalt))
+
+            if (!auth.VerifyPasswordHash(password, mjeku.PasswordHash, mjeku.PasswordSalt))
             {
                 response.Success = false;
                 response.Message = "Password incorrect";
+                return response;
             }
-            else
+
+            // Generate Access Token
+            string accessToken = CreateToken(mjeku);
+
+            // Generate Refresh Token
+            string refreshToken = CreateRefreshToken();
+            mjeku.RefreshToken = refreshToken;
+            mjeku.RefreshTokenExpiryTime = DateTime.Now.AddDays(7); // Token valid for 7 days
+
+            await _context.SaveChangesAsync(); // Save refresh token to the database
+
+            // Return both tokens to the client
+            response.Data = new LoginResponse
             {
-                response.Success = true;
-                response.Message = "Logged in successfully";
-                response.Data = CreateToken(mjeku);
-            }
+                AccessToken = accessToken,
+                RefreshToken = refreshToken
+            };
+            response.Success = true;
+            response.Message = "Logged in successfully";
+
             return response;
         }
 
+        private string CreateRefreshToken()
+        {
+            var randomNumber = new byte[64];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(randomNumber);
+                return Convert.ToBase64String(randomNumber);
+            }
+        }
+
+
         private string CreateToken(Dentist mjeku)
         {
-
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, mjeku.DentistId.ToString()),
                 new Claim(ClaimTypes.Name, mjeku.EmriMbiemri),
                 new Claim(ClaimTypes.Role, "Dentist")
-
             };
 
             var appSettingsToken = _configuration.GetSection("AppSettings:Token").Value;
@@ -159,7 +201,7 @@ namespace WebApp_DentalClinic.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(1),
+                Expires = DateTime.Now.AddMinutes(15), // Short-lived access token (15 min)
                 SigningCredentials = creds
             };
 
@@ -167,8 +209,40 @@ namespace WebApp_DentalClinic.Services
             SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(token);
-
-
         }
+
+        public async Task<ServiceResponse<LoginResponse>> RefreshToken(string refreshToken)
+        {
+            var response = new ServiceResponse<LoginResponse>();
+
+            var mjeku = await _context.Dentists.FirstOrDefaultAsync(d => d.RefreshToken == refreshToken);
+            if (mjeku == null || mjeku.RefreshTokenExpiryTime < DateTime.Now)
+            {
+                response.Success = false;
+                response.Message = "Invalid or expired refresh token";
+                return response;
+            }
+
+            // Generate a new access token
+            string newAccessToken = CreateToken(mjeku);
+
+            // Optionally, generate a new refresh token (for better security)
+            string newRefreshToken = CreateRefreshToken();
+            mjeku.RefreshToken = newRefreshToken;
+            mjeku.RefreshTokenExpiryTime = DateTime.Now.AddDays(1); 
+
+            await _context.SaveChangesAsync(); // Update database
+
+            response.Data = new LoginResponse
+            {
+                AccessToken = newAccessToken,
+                RefreshToken = newRefreshToken
+            };
+            response.Success = true;
+            response.Message = "Token refreshed successfully";
+
+            return response;
+        }
+
     }
 }

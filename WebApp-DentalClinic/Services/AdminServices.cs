@@ -2,6 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using WebApp_DentalClinic.Models;
 using WebApp_DentalClinic.ViewModels;
 
@@ -108,47 +109,72 @@ namespace WebApp_DentalClinic.Services
 
         }
 
-        public async Task<ServiceResponse<string>> Login(string email, string password)
+        public async Task<ServiceResponse<LoginResponse>> Login(string email, string password)
         {
-            var response = new ServiceResponse<string>();
+            var response = new ServiceResponse<LoginResponse>();
             Authentication auth = new Authentication();
-            var recepsionisti = await _context.Admins.FirstOrDefaultAsync(m => m.Email.ToLower().Equals(email.ToLower()));
-            if (recepsionisti is null)
+            var admin = await _context.Admins.FirstOrDefaultAsync(m => m.Email.ToLower().Equals(email.ToLower()));
+
+            if (admin == null)
             {
                 response.Success = false;
-                response.Message = "recepsionisti not found";
-
+                response.Message = "Admin not found";
+                return response;
             }
-            else if (!auth.VerifyPasswordHash(password, recepsionisti.PasswordHash, recepsionisti.PasswordSalt))
+
+            if (!auth.VerifyPasswordHash(password, admin.PasswordHash, admin.PasswordSalt))
             {
                 response.Success = false;
                 response.Message = "Password incorrect";
+                return response;
             }
-            else
-            {
 
-                response.Success = true;
-                response.Message = "Logged in successfully";
-                response.Data = CreateToken(recepsionisti);
-            }
+            // Generate Access Token
+            string accessToken = CreateToken(admin);
+
+            // Generate Refresh Token
+            string refreshToken = CreateRefreshToken();
+            admin.RefreshToken = refreshToken;
+            admin.RefreshTokenExpiryTime = DateTime.Now.AddDays(1); 
+
+            await _context.SaveChangesAsync(); // Save refresh token in database
+
+            // Return both tokens in response
+            response.Data = new LoginResponse
+            {
+                AccessToken = accessToken,
+                RefreshToken = refreshToken
+            };
+            response.Success = true;
+            response.Message = "Login successful";
+
             return response;
         }
 
-        private string CreateToken(Admin recepsionisti)
+        private string CreateRefreshToken()
         {
+            var randomNumber = new byte[64];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(randomNumber);
+                return Convert.ToBase64String(randomNumber);
+            }
+        }
 
+
+        private string CreateToken(Admin admin)
+        {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, recepsionisti.AdminId.ToString()),
-                new Claim(ClaimTypes.Name, recepsionisti.EmriMbiemri),
+                new Claim(ClaimTypes.NameIdentifier, admin.AdminId.ToString()),
+                new Claim(ClaimTypes.Name, admin.EmriMbiemri),
                 new Claim(ClaimTypes.Role, "Admin")
-
             };
 
             var appSettingsToken = _configuration.GetSection("AppSettings:Token").Value;
-            if (appSettingsToken is null)
+            if (appSettingsToken == null)
             {
-                throw new Exception("Appsettings token is null");
+                throw new Exception("AppSettings Token is null");
             }
 
             SymmetricSecurityKey key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(appSettingsToken));
@@ -157,7 +183,7 @@ namespace WebApp_DentalClinic.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(1),
+                Expires = DateTime.Now.AddMinutes(15), // Access token valid for 15 minutes
                 SigningCredentials = creds
             };
 
@@ -165,8 +191,41 @@ namespace WebApp_DentalClinic.Services
             SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(token);
-
-
         }
+
+        public async Task<ServiceResponse<LoginResponse>> RefreshToken(string refreshToken)
+        {
+            var response = new ServiceResponse<LoginResponse>();
+
+            var admin = await _context.Admins.FirstOrDefaultAsync(a => a.RefreshToken == refreshToken);
+            if (admin == null || admin.RefreshTokenExpiryTime < DateTime.Now)
+            {
+                response.Success = false;
+                response.Message = "Invalid or expired refresh token";
+                return response;
+            }
+
+            // Generate new access token
+            string newAccessToken = CreateToken(admin);
+
+            // Optionally, generate a new refresh token for added security
+            string newRefreshToken = CreateRefreshToken();
+            admin.RefreshToken = newRefreshToken;
+            admin.RefreshTokenExpiryTime = DateTime.Now.AddDays(7); // New refresh token valid for 7 more days
+
+            await _context.SaveChangesAsync(); // Update the database
+
+            response.Data = new LoginResponse
+            {
+                AccessToken = newAccessToken,
+                RefreshToken = newRefreshToken
+            };
+            response.Success = true;
+            response.Message = "Token refreshed successfully";
+
+            return response;
+        }
+
+
     }
 }

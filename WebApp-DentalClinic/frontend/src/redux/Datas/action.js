@@ -73,6 +73,52 @@ export const DeleteKontakti = (id,token) => async (dispatch) => {
     }
 }
 
+export const searchPatientsByName = (token, name) => async (dispatch) => {
+  try {
+      dispatch({ type: 'PATIENTS_SEARCH_REQUEST' });
+
+      const response = await axios.get(`https://localhost:7157/api/Patient/search?name=${name}`, {
+          headers: { Authorization: `Bearer ${token}` }
+      });
+
+      dispatch({
+          type: 'PATIENTS_SEARCH_SUCCESS',
+          payload: response.data.$values || [],
+      });
+      console.log('patient by name ',response.data.$values || []);
+  } catch (error) {
+      dispatch({
+          type: 'PATIENTS_SEARCH_FAIL',
+          payload: error.response && error.response.data.message
+              ? error.response.data.message
+              : error.message
+      });
+  }
+};
+
+export const searchDentistsByName = (token, name) => async (dispatch) => {
+  try {
+      dispatch({ type: 'DENTISTS_SEARCH_REQUEST' });
+
+      const response = await axios.get(`https://localhost:7157/api/Dentist/search?name=${name}`, {
+          headers: { Authorization: `Bearer ${token}` }
+      });
+
+      dispatch({
+          type: 'DENTISTS_SEARCH_SUCCESS',
+          payload: response.data.$values || [],
+      });
+      console.log('dentist by name ',response.data.$values || []);
+  } catch (error) {
+      dispatch({
+          type: 'DENTISTS_SEARCH_FAIL',
+          payload: error.response && error.response.data.message
+              ? error.response.data.message
+              : error.message
+      });
+  }
+};
+
 export const GetAllPatients = (token) => async (dispatch) => {
   try {
       dispatch({ type: types.GET_PATIENT_REQUEST });

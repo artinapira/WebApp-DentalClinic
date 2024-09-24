@@ -10,6 +10,7 @@ import AddAnkesa from './Pages/AddAnkesa';
 import AddVlersimi from './Pages/AddVlersimi';
 import PatientProfile from './Pages/PatientProfile';
 import Admin from './Pages/Dashboard/Main-Dashboard/AllPages/GlobalFiles/Admin';
+import ProtectedRoute from './ProtectedRoute';
 import {
   BrowserRouter as Router,
   Routes,
@@ -42,62 +43,54 @@ import Knowledge from './Pages/Knowledge';
 import DentistProfile from './Pages/Dashboard/Main-Dashboard/AllPages/Dentist/DentistProfile';
 import Appointments from './Pages/Dashboard/Main-Dashboard/AllPages/Dentist/checkappointments';
 
-
-
-
 function App() {
   return (
     <Router>
+      <Routes>
+        <Route path="/" element={<DLogin />} />
+        <Route path="/Login" element={<Login />} />
 
-            <Routes>
-                
-                <Route path="/" element={<DLogin/>}/>
-                <Route path="/Login" element={<Login/>}/>
-                <Route path="/About" element={<About />} />
-                <Route path="/Home" element={<Home/>} />
-                <Route path="/Services2" element={<Services2 />} />
-                <Route path="/Footer" element={<Footer />} />
-                <Route path="/Contactus" element={<ContactUs/>}/>
-                <Route path="/Dentists" element={<Dentists/>}/>
-                <Route path="/Patients" element={<Patients/>}/>
-                <Route path="/AddAnkesa" element={<AddAnkesa/>}/>
-                <Route path="/AddVlersimi" element={<AddVlersimi/>}/>
-                <Route path="/PatientProfile" element={<PatientProfile/>}/>
-                <Route path="/kontaktet" element={<Kontaktet/>}/>
-                <Route path="/admin" element={<Admin/>}/>
-                <Route path="/dentist" element={<Dentist/>}/>
-                <Route path="/dashboard" element={<FrontPage/>}/>
-                <Route path="/terminet" element={<Terminet/>}/>
-                <Route path="/ankesat" element={<Ankesat/>}/>
-                <Route path="/vlersimet" element={<Vlersimet/>}/>
-                <Route path="/medicalRecord" element={<MedicalRecord/>}/>
-                <Route path="/patientNote" element={<PatientNote/>}/>
-                <Route path="/prescription" element={<Prescription/>}/>
-                <Route path="/Marketing" element={<Marketing/>}/>
-                <Route path="/Knowledge" element={<Knowledge/>}/>
-                <Route path="/DentistProfile" element={<DentistProfile/>}/>
-                <Route path="/checkappointment" element={<Appointments/>}/>
-                <Route path="/Add_Dentist" element={<AddDentist/>}/>
-                <Route path="/Add_Admin" element={<AddAdmin />} />
-                <Route path="/Add_Patient" element={<AddPatient />} />
-                <Route path="/Add_Termini" element={<AddTermini />} />
-                <Route path="EditAdmin/:id" element={<EditAdmin/>}/>
-                <Route path="EditPatient/:id" element={<EditPatient/>}/>
-                <Route path="EditDentist/:id" element={<EditDentist/>}/>
-                <Route path="EditTermini/:id" element={<EditTerminet/>}/>
-                <Route path="EditMedicalRecord/:id" element={<EditMedicalRecord/>}/>
-                <Route path="EditPatientNote/:id" element={<EditPatientNote/>}/>
-                <Route path="EditPrescription/:id" element={<EditPrescription/>}/>
-
-
-              
-
-
-
-
-            </Routes>
-        </Router>
+        <Route element={<ProtectedRoute />}>
+          <Route path="/About" element={<About />} />
+          <Route path="/Home" element={<Home />} />
+          <Route path="/Services2" element={<Services2 />} />
+          <Route path="/Footer" element={<Footer />} />
+          <Route path="/Contactus" element={<ContactUs />} />
+          <Route path="/Dentists" element={<Dentists />} />
+          <Route path="/Patients" element={<Patients />} />
+          <Route path="/AddAnkesa" element={<AddAnkesa />} />
+          <Route path="/AddVlersimi" element={<AddVlersimi />} />
+          <Route path="/PatientProfile" element={<PatientProfile />} />
+          <Route path="/kontaktet" element={<Kontaktet />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/dentist" element={<Dentist />} />
+          <Route path="/dashboard" element={<FrontPage />} />
+          <Route path="/terminet" element={<Terminet />} />
+          <Route path="/ankesat" element={<Ankesat />} />
+          <Route path="/vlersimet" element={<Vlersimet />} />
+          <Route path="/medicalRecord" element={<MedicalRecord />} />
+          <Route path="/patientNote" element={<PatientNote />} />
+          <Route path="/prescription" element={<Prescription />} />
+          <Route path="/Marketing" element={<Marketing />} />
+          <Route path="/Knowledge" element={<Knowledge />} />
+          <Route path="/DentistProfile" element={<DentistProfile />} />
+          <Route path="/checkappointment" element={<Appointments />} />
+          <Route path="/Add_Dentist" element={<AddDentist />} />
+          <Route path="/Add_Admin" element={<AddAdmin />} />
+          <Route path="/Add_Patient" element={<AddPatient />} />
+          <Route path="/Add_Termini" element={<AddTermini />} />
+          <Route path="EditAdmin/:id" element={<EditAdmin />} />
+          <Route path="EditPatient/:id" element={<EditPatient />} />
+          <Route path="EditDentist/:id" element={<EditDentist />} />
+          <Route path="EditTermini/:id" element={<EditTerminet />} />
+          <Route path="EditMedicalRecord/:id" element={<EditMedicalRecord />} />
+          <Route path="EditPatientNote/:id" element={<EditPatientNote />} />
+          <Route path="EditPrescription/:id" element={<EditPrescription />} />
+        </Route>
+      </Routes>
+    </Router>
   );
 }
+
 
 export default App;
