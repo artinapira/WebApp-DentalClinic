@@ -31,22 +31,39 @@ namespace WebApp_DentalClinic.Services
         {
             var response = new ServiceResponse<List<Dentist>>();
             Authentication auth = new Authentication();
+
+            // Check if the dentist already exists
             if (await DentistExists(mjeku.Email))
             {
                 response.Success = false;
                 response.Message = "Mjeku already exists";
                 return response;
             }
-            auth.CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
 
+            // Create password hash and salt
+            auth.CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
             mjeku.PasswordHash = passwordHash;
             mjeku.PasswordSalt = passwordSalt;
+
+            // Automatically generate and assign a refresh token
+            mjeku.RefreshToken = GenerateRefreshToken();
+
+            // Add the dentist to the database
             _context.Dentists.Add(mjeku);
             await _context.SaveChangesAsync();
+
+            // Return the list of dentists
             response.Data = await _context.Dentists.ToListAsync();
             response.Success = true;
             return response;
         }
+
+        private string GenerateRefreshToken()
+        {
+            // Generate a secure random token, using GUID as an example
+            return Guid.NewGuid().ToString();
+        }
+
 
 
         public async Task<ServiceResponse<List<Dentist>?>> DeleteDentist(int id)

@@ -30,24 +30,41 @@ namespace WebApp_DentalClinic.Services
 
         public async Task<ServiceResponse<List<Patient>?>> AddPatient(Patient pacienti, string password)
         {
-
             var response = new ServiceResponse<List<Patient>>();
             Authentication auth = new Authentication();
+
+            // Check if the patient already exists
             if (await PatientExists(pacienti.Email))
             {
-                response.Success = true;
+                response.Success = false;  // Set Success to false, since the patient already exists
                 response.Message = "pacienti already exists";
                 return response;
             }
-            auth.CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
 
+            // Create password hash and salt
+            auth.CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
             pacienti.PasswordHash = passwordHash;
             pacienti.PasswordSalt = passwordSalt;
+
+            // Automatically generate a refresh token
+            pacienti.RefreshToken = GenerateRefreshToken();
+
+            // Add patient to the context
             _context.Patients.Add(pacienti);
             await _context.SaveChangesAsync();
+
+            // Return all patients
             response.Data = await _context.Patients.ToListAsync();
+            response.Success = true;  // Indicate success when the patient is added successfully
             return response;
         }
+
+        // Generate a refresh token
+        private string GenerateRefreshToken()
+        {
+            return Guid.NewGuid().ToString();  // Generate a simple token, can be enhanced later
+        }
+
         public async Task<List<Patient>?> DeletePatient(int id)
         {
             var pacienti = await _context.Patients.FindAsync(id);

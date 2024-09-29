@@ -54,7 +54,7 @@ console.log('Data of admin sidebar',admin);
         <div style={{ width: isOpen ? "200px" : "70px" }} className={`sidebar1`}>
           <div className="top_section1">
             <h1 style={{ display: isOpen ? "block" : "none" }} className="logo1">
-              Margin
+              Menu
             </h1>
             <div
               style={{ marginLeft: isOpen ? "50px" : "0px" }}

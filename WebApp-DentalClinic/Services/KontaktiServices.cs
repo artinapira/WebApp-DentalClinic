@@ -21,6 +21,7 @@ namespace WebApp_DentalClinic.Services
                 var _kontakti = new Kontakti
                 {
                     Mesazhi = kontakti.Mesazhi,
+                    PatientId = kontakti.PatientId,
                 };
 
                 _context.Kontaktis.Add(_kontakti);
@@ -53,6 +54,7 @@ namespace WebApp_DentalClinic.Services
             if (_kontakti != null)
             {
                 _kontakti.Mesazhi = kontakti.Mesazhi;
+                _kontakti.PatientId = kontakti.PatientId;
                 _context.SaveChanges();
             }
             return _kontakti;

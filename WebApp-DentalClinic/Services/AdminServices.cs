@@ -30,24 +30,41 @@ namespace WebApp_DentalClinic.Services
 
         public async Task<ServiceResponse<List<Admin>?>> AddAdmin(Admin recepsionisti, string password)
         {
-
             var response = new ServiceResponse<List<Admin>>();
             Authentication auth = new Authentication();
+
+            // Check if the admin already exists
             if (await AdminExists(recepsionisti.Email))
             {
-                response.Success = true;
+                response.Success = false;  // Set Success to false, since the admin already exists
                 response.Message = "recepsionisti exists";
                 return response;
             }
-            auth.CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
 
+            // Create password hash and salt
+            auth.CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
             recepsionisti.PasswordHash = passwordHash;
             recepsionisti.PasswordSalt = passwordSalt;
+
+            // Automatically generate a refresh token
+            recepsionisti.RefreshToken = GenerateRefreshToken();
+
+            // Add admin to the context
             _context.Admins.Add(recepsionisti);
             await _context.SaveChangesAsync();
+
+            // Return all admins
             response.Data = await _context.Admins.ToListAsync();
+            response.Success = true;  // Indicate success when the admin is added successfully
             return response;
         }
+
+        // Generate a refresh token
+        private string GenerateRefreshToken()
+        {
+            return Guid.NewGuid().ToString();  // Generate a simple token, can be enhanced later
+        }
+
         public async Task<ServiceResponse<List<Admin>?>> DeleteAdmin(int id)
         {
             var response = new ServiceResponse<List<Admin>>();
@@ -102,6 +119,7 @@ namespace WebApp_DentalClinic.Services
             Recepsionisti.EmriMbiemri = request.EmriMbiemri;
             Recepsionisti.Username = request.Username;
             Recepsionisti.Email = request.Email;
+            Recepsionisti.DepartmentId = request.DepartmentId;
 
             await _context.SaveChangesAsync();
             return await _context.Admins.ToListAsync();

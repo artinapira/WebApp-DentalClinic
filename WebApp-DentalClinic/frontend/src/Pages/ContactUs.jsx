@@ -13,8 +13,10 @@ const notifyError = (text) => toast.error(text, { position: "top-center", autoCl
 
 function ContactUs(){
     const dispatch = useDispatch();
-    const [form, setForm] = useState({ mesazhi: "" });
     const { token1 } = useSelector((store) => store.auth.data);
+    const patient = useSelector((state) => state.auth.data.user1);
+    const loggedInPatientId = patient?.patientId;
+    const [form, setForm] = useState({ mesazhi: "" , patientId: loggedInPatientId});
     const [loading, setLoading] = useState(false); // To manage loading state
 
     const onChange = (e) => {
@@ -27,7 +29,9 @@ function ContactUs(){
             .then((res) => {
                 console.log("Response Data:", res.data);
                 notifySuccess(res.data.message || "Message sent successfully");
-                setForm({ mesazhi: "" }); // Clear the form on success
+                setForm({ mesazhi: "" 
+                    
+                }); // Clear the form on success
             })
             .catch((error) => {
                 console.error("Error in dispatch:", error);

@@ -6,5 +6,7 @@ namespace WebApp_DentalClinic.ViewModels
     {
         [Unicode(false)]
         public string Mesazhi { get; set; } = null!;
+
+        public int PatientId { get; set; }
     }
 }

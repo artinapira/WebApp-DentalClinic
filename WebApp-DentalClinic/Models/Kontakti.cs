@@ -13,6 +13,8 @@ namespace WebApp_DentalClinic.Models
         [Unicode(false)]
         public string Mesazhi { get; set; } = null!;
 
-        // Remove Email and any other unwanted fields
+        public int PatientId { get; set; }
+
+        public virtual Patient Patient { get; set; } = null!;
     }
 }

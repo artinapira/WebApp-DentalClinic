@@ -61,6 +61,7 @@ namespace WebApp_DentalClinic.Controllers
                 EmriMbiemri = recepsionisti.EmriMbiemri,
                 Username = recepsionisti.Username,
                 Email = recepsionisti.Email,
+                DepartmentId = recepsionisti.DepartmentId,
 
             });
             if (result == null)
@@ -112,6 +113,7 @@ namespace WebApp_DentalClinic.Controllers
                      EmriMbiemri = recepsionisti.EmriMbiemri,
                      Username = recepsionisti.Username,
                      Email = recepsionisti.Email,
+                     DepartmentId = recepsionisti.DepartmentId,
 
 
                  }

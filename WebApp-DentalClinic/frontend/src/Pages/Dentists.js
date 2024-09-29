@@ -53,11 +53,9 @@ function Dentists() {
     };
 
     const columns = [
-        { title: "Dentist ID", dataIndex: "dentistId", key: "dentistId" },
         { title: "Name", dataIndex: "emriMbiemri", key: "emriMbiemri" },
         { title: "Degree", dataIndex: "degree", key: "degree" },
         { title: "Schedule", dataIndex: "orari", key: "orari" },
-        { title: "Salary", dataIndex: "paga", key: "paga" },
         { title: "Department ID", dataIndex: "departmentId", key: "departmentId" },
         {
             title: "Actions",

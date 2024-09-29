@@ -173,6 +173,7 @@ export const PatientRegister = (data,token) => async (dispatch) => {
             Authorization: "Bearer " + token
         }}
     );
+    console.log('data res',res.data);
     return res.data;
 
   } catch (error) {
