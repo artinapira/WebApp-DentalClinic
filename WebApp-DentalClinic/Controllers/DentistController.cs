@@ -30,6 +30,7 @@ namespace WebApp_DentalClinic.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Dentist")]
         [HttpGet("/DentistProfile")]
         public async Task<ActionResult<Dentist>> GetDentistProfile()
         {

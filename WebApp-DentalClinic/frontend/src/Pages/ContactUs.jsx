@@ -56,7 +56,7 @@ function ContactUs(){
                                 </div>
                                 <form>
                                     <div className="form-group2">
-                                        <h6>Send message to inform us about your inputs</h6>
+                                        <h6>Send us a message</h6>
                                         <br></br>
                                         <input
                                             name="mesazhi"
